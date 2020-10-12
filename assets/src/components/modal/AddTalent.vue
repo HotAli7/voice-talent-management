@@ -21,7 +21,7 @@
                                     <div class="relative w-24 h-24 rounded-full border border-gray-200 overflow-hidden">
                                         <img id="output_avatar" width="200" />
                                         <input type="file"  accept="image/*" name="avatar" id="avatar"  @change="loadAvatar($event)" class="hidden">
-                                        <label for="avatar" class="flex justify-center items-center w-full h-full cursor-pointer bg-gray-300 opacity-0 hover:opacity-75 transition-all duration-300 ease-in-out z-10" ><i class="fa fa-plus text-2xl"></i></label>
+                                        <label for="avatar" class="absolute top-0 flex justify-center items-center w-full h-full cursor-pointer bg-gray-300 opacity-0 hover:opacity-75 transition-all duration-300 ease-in-out z-10" ><i class="fa fa-plus text-2xl"></i></label>
                                     </div>
                                 </div>
                                 <div class="mt-4">
