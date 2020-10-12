@@ -1,0 +1,32 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+#adminmenumain {
+    @apply hidden;
+}
+
+#wpcontent {
+    @apply ml-0;
+}
+#wpcontent #wpbody {
+    @apply mt-24;
+}
+#wpbody-content .update-nag,
+#wpbody-content .wf-admin-notice.notice.notice-error {
+    @apply hidden;
+}
+
+#wpfooter {
+    @apply hidden;
+}
+
+#voice-talent {
+    @apply mt-20;
+}
+
+.container {
+    @apply mx-auto;
+}

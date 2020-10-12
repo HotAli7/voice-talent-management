@@ -1,0 +1,121 @@
+<template>
+    <div class="container my-5">
+        <div class="flex justify-between mb-6 px-6 container">
+            <h3 class="text-blue-600 text-xl font-bold py-2 px-4 m-2">Uploaded Talent Voice</h3>
+            <button class="transition duration-500 ease-in-out bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded" @click="updateModalVisibility('showAddModal', true)">
+                <i class="fa fa-music"></i><span class="ml-2 uppercase">add new media</span>
+            </button>
+        </div>
+        <hr class="bg-blue-500 mb-6">
+        <Alert :errorMsg="errorMsg" :successMsg="successMsg" />
+        <div class="flex flex-col">
+            <div class="overflow-x-auto">
+                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <VoiceMediaHeader/>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr v-for="media in medias">
+                                    <td class="px-6 py-4 whitespace-no-wrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded-full" :src=media.avatar alt="">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm leading-5 font-medium text-gray-900">
+                                                    {{media.talent_name}}
+                                                </div>
+                                                <div class="text-sm leading-5 text-gray-500">
+                                                    {{media.gender}}
+                                                </div>
+                                                <div class="text-sm leading-5 text-gray-500">
+                                                    {{media.age}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap">
+                                        <div class="text-sm leading-5 text-gray-500"><a :href="media.guid" target="_blank">{{media.platform}}</a></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        {{media.accent}}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        {{media.language}}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        {{media.style}}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        {{media.tone}}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+                                        <button @click="selectTalent(media, 'showEditModal')" class="pr-4 text-indigo-600 hover:text-indigo-900 focus:outline-none"><i class="fa fa-edit pr-2"></i>Edit</button>
+                                        <button @click="selectTalent(media, 'showDeleteModal')" class="text-red-600 hover:text-red-900 focus:outline-none"><i class="fa fa-trash pr-2"></i>Delete</button>
+                                    </td>
+                                </tr>
+
+                            <!-- More rows... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <Pagination/>
+        <AddTalentModal />
+        <EditTalentModal />
+        <DeleteTalentModal />
+    </div>
+</template>
+
+<script>
+    import { mapGetters, mapActions } from 'vuex'
+
+    import VoiceMediaHeader from "./VoiceMediaHeader";
+    import Pagination from "./Pagination";
+    import Alert from "../modal/Alert";
+    import AddTalentModal from "../modal/AddTalent";
+    import EditTalentModal from "../modal/EditTalent";
+    import DeleteTalentModal from "../modal/DeleteTalent";
+
+    export default {
+        name: "VoiceMedia",
+        components: {
+            VoiceMediaHeader,
+            Pagination,
+            Alert,
+            AddTalentModal,
+            EditTalentModal,
+            DeleteTalentModal
+        },
+        data() {
+            return {
+            }
+        },
+        created() {
+            this.fetchData()
+        },
+        destroyed() {
+            this.resetState()
+        },
+        computed: {
+            ...mapGetters('VoiceMediaList', ['medias', 'total', 'errorMsg', 'successMsg', 'currentPage', 'pageSize']),
+        },
+        methods: {
+            ...mapActions('VoiceMediaList', ['fetchData', 'resetState', 'setModalVisibility', 'selectTalent']),
+            updateModalVisibility(modalName, modalValue, talentID=0) {
+                let v = {
+                        modalName: modalName,
+                        modalValue: modalValue,
+                        talentID: talentID
+                    }
+                this.setModalVisibility(v)
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
