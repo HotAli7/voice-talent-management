@@ -9,6 +9,10 @@ class ClassVTMRestAPI
     public function __construct()
     {
         add_action( 'rest_api_init', array( $this, 'register_vtm_rest_api_route' ) );
+
+        require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+        require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+        require_once(ABSPATH . "wp-admin" . '/includes/media.php');
     }
 
     public function register_vtm_rest_api_route() {
@@ -142,7 +146,7 @@ class ClassVTMRestAPI
         ));
     }
 
-    protected function find_a_voice_media_dir( $param ){
+    public function find_a_voice_media_dir( $param ){
         $mydir = '/fav';
 
         $param['path'] = $param['path'] . $mydir;
@@ -156,7 +160,6 @@ class ClassVTMRestAPI
 
         $db_prefix = $wpdb->prefix;
 
-        $talent_id = $request['talent_id'];
         // if no sort, default to accent
         $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'talent_name';
 
@@ -169,9 +172,6 @@ class ClassVTMRestAPI
 					left join {$db_prefix}lfm_ages c on a.talent_age = c.id_age
 					left join {$db_prefix}posts j on a.image_location = j.ID
 					order by $orderby $order";
-
-        if ($talent_id != "")
-            $sql .= " WHERE id_voice_talent = $talent_id";
 
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
 
@@ -193,7 +193,7 @@ class ClassVTMRestAPI
 
         $result = array('error'=>false);
 
-        $talent_name = ucwords(strtolower($request['talent_name']));
+        $talent_name = ucwords(strtolower($request['name']));
         // check if already exists
         $sql = "select talent_name from $tbl where talent_name = '$talent_name'";
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
@@ -231,7 +231,7 @@ class ClassVTMRestAPI
         $tbl = $db_prefix . "lfm_voice_talents";
 
         $result = array('error'=>false);
-        if (isset($request['talent_id']) && ($request['talent_id'] != '')) {
+        if (isset($request['id']) && ($request['id'] != '')) {
 
             $uploaded = 0;
             if(isset($_FILES['avatar'])){
@@ -241,16 +241,26 @@ class ClassVTMRestAPI
                 remove_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
             }
 
-            $talent_id = $request['talent_id'];
-            $wpdb->update(
-                $tbl,
-                array('talent_name'         => $request['talent_name'],
-                    'talent_gender'         => $request['gender'],
-                    'talent_age'            => $request['age'],
-                    'image_location'        => $uploaded,
-                    'status'                => $request['status']), // data
-                array('id_voice_talent' => $talent_id) // where
-            );
+            $talent_id = $request['id'];
+            if ($uploaded == 0)
+                $wpdb->update(
+                    $tbl,
+                    array('talent_name'         => $request['name'],
+                        'talent_gender'         => $request['gender'],
+                        'talent_age'            => $request['age'],
+                        'status'                => $request['status']), // data
+                    array('id_voice_talent' => $talent_id) // where
+                );
+            else
+                $wpdb->update(
+                    $tbl,
+                    array('talent_name'         => $request['name'],
+                        'talent_gender'         => $request['gender'],
+                        'talent_age'            => $request['age'],
+                        'image_location'        => $uploaded,
+                        'status'                => $request['status']), // data
+                    array('id_voice_talent' => $talent_id) // where
+                );
             $result['message'] = "Voice talent updated";
         } else {
             $result['error'] = true;
@@ -268,8 +278,8 @@ class ClassVTMRestAPI
         $tbl_media = $db_prefix . "lfm_media_files";
 
         $result = array('error'=>false);
-        if (isset($request['talent_id']) && ($request['talent_id'] != '')) {
-            $talent_id = $request["talent_id"];
+        if (isset($request['id']) && ($request['id'] != '')) {
+            $talent_id = $request["id"];
             // check if any media is associated with this talentid
             $sql = "select count(id_media) as total from $tbl_media where id_voice_talent = $talent_id";
             $db_data = $wpdb->get_results($sql, 'ARRAY_A');

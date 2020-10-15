@@ -12,7 +12,7 @@
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                             <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                                Delete Talent
+                                Delete Talent <span class="text-red-500">{{currentTalent.name}}</span>
                             </h3>
                             <div class="mt-2">
                                 <p class="text-sm leading-5 text-gray-500">
@@ -24,7 +24,7 @@
                 </div>
                 <div class="bg-gray-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                        <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="deleteTalent()">
                             Delete Talent
                         </button>
                     </span>
@@ -56,10 +56,10 @@
         destroyed() {
         },
         computed: {
-            ...mapGetters('VoiceTalentList', ['showDeleteModal', 'ageGroup']),
+            ...mapGetters('VoiceTalentList', ['showDeleteModal', 'currentTalent']),
         },
         methods: {
-            ...mapActions('VoiceTalentList', ['setModalVisibility', 'fetchAgeGroupData']),
+            ...mapActions('VoiceTalentList', ['setModalVisibility', 'fetchAgeGroupData', 'deleteTalent']),
             updateModalVisibility(modalName, modalValue) {
                 let v = {
                     modalName: modalName,

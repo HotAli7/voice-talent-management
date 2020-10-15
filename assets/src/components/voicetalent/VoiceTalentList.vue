@@ -63,7 +63,7 @@
     import { mapGetters, mapActions } from 'vuex'
 
     import VoiceTalentHeader from "./VoiceTalentHeader";
-    import Pagination from "../voicemedia/Pagination";
+    import Pagination from "../voicetalent/Pagination";
     import Alert from "../modal/Alert";
     import AddTalentModal from "../modal/AddTalent";
     import EditTalentModal from "../modal/EditTalent";

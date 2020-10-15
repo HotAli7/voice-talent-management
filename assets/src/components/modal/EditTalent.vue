@@ -25,22 +25,22 @@
                                     </div>
                                 </div>
                                 <div class="mt-4">
-                                    <input aria-label="Name" name="name" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Name" :value="currentTalent.name">
+                                    <input aria-label="Name" name="name" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Name" :value="currentTalent.name" @change="updateName($event)">
                                 </div>
                                 <div class="mt-4">
-                                    <select aria-label="Gender" name="gender" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5">
+                                    <select aria-label="Gender" name="gender" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateGender($event)">
                                         <option value="">Gender</option>
                                         <option :value="g.id" :selected="currentTalent.gender === g.id" v-for="g in gender">{{g.name}}</option>
                                     </select>
                                 </div>
                                 <div class="mt-4">
-                                    <select aria-label="Gender" name="gender" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5">
+                                    <select aria-label="Age" name="age" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateAge($event)">
                                         <option value="">Age</option>
                                         <option :value="age.id_age" :selected="currentTalent.age === age.id_age" v-for="age in ageGroup">{{age.age}}</option>
                                     </select>
                                 </div>
                                 <div class="mt-4">
-                                    <select aria-label="Statue" name="statue" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Statue">
+                                    <select aria-label="Statue" name="statue" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateStatus($event)">
                                         <option value="">Status</option>
                                         <option :value="s.id" :selected="currentTalent.status === s.id" v-for="s in status">{{s.name}}</option>
                                     </select>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="bg-white px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                        <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="showAddModal=false">
+                        <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5" @click="updateTalent()">
                         Save Talent
                         </button>
                     </span>
@@ -86,13 +86,30 @@
             ...mapGetters('VoiceTalentList', ['showEditModal', 'ageGroup', 'currentTalent', 'gender', 'status']),
         },
         methods: {
-            ...mapActions('VoiceTalentList', ['selectTalent', 'fetchAgeGroupData', 'setModalVisibility']),
+            ...mapActions('VoiceTalentList', ['setModalVisibility', 'fetchAgeGroupData', 'updateTalent', 'saveTalent', 'setAvatar', 'setName', 'setGender', 'setAge', 'setStatus']),
             updateModalVisibility(modalName, modalValue) {
                 let v = {
                     modalName: modalName,
                     modalValue: modalValue,
                 }
                 this.setModalVisibility(v)
+            },
+            loadAvatar(event) {
+                var image = document.getElementById('output_avatar');
+                image.src = URL.createObjectURL(event.target.files[0]);
+                this.setAvatar(event.target.files[0])
+            },
+            updateName(event) {
+                this.setName(event.target.value)
+            },
+            updateGender(event) {
+                this.setGender(event.target.value)
+            },
+            updateAge(event) {
+                this.setAge(event.target.value)
+            },
+            updateStatus(event) {
+                this.setStatus(event.target.value)
             }
         }
     }

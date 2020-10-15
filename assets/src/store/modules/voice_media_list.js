@@ -90,7 +90,6 @@ const actions = {
                     {
                         commit('setAll', response.data.medias);
                     }
-                    console.log(response.data.medias);
                 })
             .catch(error => {
                 message = error.response.data.message || error.message

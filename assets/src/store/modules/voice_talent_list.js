@@ -3,11 +3,12 @@ function initialState() {
         talents: [],
         ageGroup: [],
         newTalent: {
+            id: "",
             name: "",
             age: "",
             gender: "",
             status: "",
-            avatar: ""
+            avatar: null
         },
         currentTalent: {
             id: "",
@@ -15,7 +16,7 @@ function initialState() {
             age: "",
             gender: "",
             status: "",
-            avatar: ""
+            avatar: null
         },
         gender: [
             { id: "3", name: "Male" },
@@ -48,6 +49,7 @@ const getters = {
         return ageGroupData
     },
     currentTalent:      state => state.currentTalent,
+    newTalent:          state => state.newTalent,
     gender:             state => state.gender,
     status:             state => state.status,
     total:              state => state.talents.length,
@@ -75,7 +77,7 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.response.data.message || error.message
+                message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
@@ -94,7 +96,112 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.response.data.message || error.message
+                message = error.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
+    insertTalent({ commit, state, dispatch }) {
+
+        let params = _.cloneDeep(state.newTalent)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/insert-talent", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showAddModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchData')
+                    }
+                })
+            .catch(error => {
+                message = error.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
+    updateTalent({ commit, state, dispatch }) {
+
+        let params = _.cloneDeep(state.newTalent)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/update-talent", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showEditModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchData')
+                    }
+                })
+            .catch(error => {
+                message = error.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
+    deleteTalent({ commit, state, dispatch }) {
+
+        let params = _.cloneDeep(state.newTalent)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/delete-talent", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showDeleteModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchData')
+                    }
+                })
+            .catch(error => {
+                message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
@@ -112,6 +219,21 @@ const actions = {
     },
     changePageNumber({ commit }, value) {
         commit('changePageNumber', value)
+    },
+    setAvatar({ commit }, value) {
+        commit('setAvatar', value)
+    },
+    setName({ commit }, value) {
+        commit('setName', value)
+    },
+    setGender({ commit }, value) {
+        commit('setGender', value)
+    },
+    setAge({ commit }, value) {
+        commit('setAge', value)
+    },
+    setStatus({ commit }, value) {
+        commit('setStatus', value)
     },
     resetState({ commit }) {
         commit('resetState')
@@ -132,6 +254,13 @@ const mutations = {
         state.currentTalent.gender  = value1['talent_gender']
         state.currentTalent.status  = value1['status']
         state.currentTalent.avatar  = value1['guid']
+
+        state.newTalent.id          = value1['id_voice_talent']
+        state.newTalent.name        = value1['talent_name']
+        state.newTalent.age         = value1['talent_age']
+        state.newTalent.gender      = value1['talent_gender']
+        state.newTalent.status      = value1['status']
+        state.newTalent.avatar      = value1['guid']
     },
     setModalVisibility(state, value) {
         let modalName = value['modalName']
@@ -141,6 +270,21 @@ const mutations = {
     },
     changePageNumber(state, value) {
         state.currentPage = value
+    },
+    setAvatar(state, value) {
+        state.newTalent.avatar = value
+    },
+    setName(state, value) {
+        state.newTalent.name = value
+    },
+    setGender(state, value) {
+        state.newTalent.gender = value
+    },
+    setAge(state, value) {
+        state.newTalent.age = value
+    },
+    setStatus(state, value) {
+        state.newTalent.status = value
     },
     resetState(state) {
         state = Object.assign(state, initialState())
