@@ -8,20 +8,8 @@ function initialState() {
         platforms: [],
         styles: [],
         tones: [],
-        newTalent: {
-            name: "",
-            age: "",
-            gender: "",
-            status: "",
-            avatar: ""
-        },
-        currentTalent: {
-            name: "",
-            age: "",
-            gender: "",
-            status: "",
-            avatar: ""
-        },
+        newMedia: [],
+        currentMedia: [],
         errorMsg: false,
         successMsg: false,
         showAddModal: false,
@@ -92,7 +80,7 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.response.data.message || error.message
+                let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
@@ -111,7 +99,7 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.response.data.message || error.message
+                let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
@@ -130,7 +118,7 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.response.data.message || error.message
+                let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })

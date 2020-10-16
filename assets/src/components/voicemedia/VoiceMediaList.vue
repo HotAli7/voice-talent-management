@@ -75,9 +75,9 @@
     import VoiceMediaHeader from "./VoiceMediaHeader";
     import Pagination from "./Pagination";
     import Alert from "../modal/Alert";
-    import AddTalentModal from "../modal/AddTalent";
-    import EditTalentModal from "../modal/EditTalent";
-    import DeleteTalentModal from "../modal/DeleteTalent";
+    import AddMediaModal from "../modal/AddMedia";
+    import EditMediaModal from "../modal/EditMedia";
+    import DeleteMediaModal from "../modal/DeleteMedia";
 
     export default {
         name: "VoiceMedia",
@@ -85,9 +85,9 @@
             VoiceMediaHeader,
             Pagination,
             Alert,
-            AddTalentModal,
-            EditTalentModal,
-            DeleteTalentModal
+            AddMediaModal,
+            EditMediaModal,
+            DeleteMediaModal
         },
         data() {
             return {
