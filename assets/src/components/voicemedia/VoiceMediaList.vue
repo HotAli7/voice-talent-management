@@ -50,8 +50,8 @@
                                         {{media.tone}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                                        <button @click="selectTalent(media, 'showEditModal')" class="pr-4 text-indigo-600 hover:text-indigo-900 focus:outline-none"><i class="fa fa-edit pr-2"></i>Edit</button>
-                                        <button @click="selectTalent(media, 'showDeleteModal')" class="text-red-600 hover:text-red-900 focus:outline-none"><i class="fa fa-trash pr-2"></i>Delete</button>
+                                        <button @click="selectMedia({ value1: media, value2: 'showEditModal' })" class="pr-4 text-indigo-600 hover:text-indigo-900 focus:outline-none"><i class="fa fa-edit pr-2"></i>Edit</button>
+                                        <button @click="selectMedia({ value1: media, value2: 'showDeleteModal' })" class="text-red-600 hover:text-red-900 focus:outline-none"><i class="fa fa-trash pr-2"></i>Delete</button>
                                     </td>
                                 </tr>
 
@@ -63,9 +63,9 @@
             </div>
         </div>
         <Pagination/>
-        <AddTalentModal />
-        <EditTalentModal />
-        <DeleteTalentModal />
+        <AddMediaModal />
+        <EditMediaModal />
+        <DeleteMediaModal />
     </div>
 </template>
 
@@ -103,7 +103,7 @@
             ...mapGetters('VoiceMediaList', ['medias', 'total', 'errorMsg', 'successMsg', 'currentPage', 'pageSize']),
         },
         methods: {
-            ...mapActions('VoiceMediaList', ['fetchData', 'resetState', 'setModalVisibility', 'selectTalent']),
+            ...mapActions('VoiceMediaList', ['fetchData', 'resetState', 'setModalVisibility', 'selectMedia']),
             updateModalVisibility(modalName, modalValue, talentID=0) {
                 let v = {
                         modalName: modalName,

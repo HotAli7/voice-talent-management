@@ -27,34 +27,15 @@ const getters = {
         let rows = state.medias.slice(firstSliceNumber, lastSliceNumber)
         return rows
     },
-    ageGroup: state => {
-        let ageGroupData = state.ageGroup
-        return ageGroupData
-    },
-    talents: state => {
-        let talentData = state.talents
-        return talentData
-    },
-    accents: state => {
-        let accentData = state.accents
-        return accentData
-    },
-    languages: state => {
-        let languageData = state.languages
-        return languageData
-    },
-    platforms: state => {
-        let platformData = state.platforms
-        return platformData
-    },
-    styles: state => {
-        let styleData = state.styles
-        return styleData
-    },
-    tones: state => {
-        let toneData = state.tones
-        return toneData
-    },
+    ageGroup:           state => state.ageGroup,
+    talents:            state => state.talents,
+    accents:            state => state.accents,
+    languages:          state => state.languages,
+    platforms:          state => state.platforms,
+    styles:             state => state.styles,
+    tones:              state => state.tones,
+    currentMedia:       state => state.currentMedia,
+    newMedia:           state => state.newMedia,
     total:              state => state.medias.length,
     errorMsg:           state => state.errorMsg,
     successMsg:         state => state.successMsg,
@@ -126,8 +107,13 @@ const actions = {
     setModalVisibility({ commit }, value) {
         commit('setModalVisibility', value)
     },
-    selectTalent({ commit }, value1, value2) {
-        commit('selectTalent', value1, value2)
+    selectMedia({ commit }, { value1, value2 }) {
+        commit('selectMedia', value1)
+        let v = {
+            modalName: value2,
+            modalValue: true,
+        }
+        commit('setModalVisibility', v)
     },
     changePageNumber({ commit }, value) {
         commit('changePageNumber', value)
@@ -147,24 +133,15 @@ const mutations = {
     setAgeGroup(state, items) {
         state.ageGroup = items
     },
-    selectTalent(state, value1, value2) {
-        state.currentTalent.name    = value1['talent_name']
-        state.currentTalent.age     = value1['talent_age']
-        state.currentTalent.gender  = value1['talent_gender']
-        state.currentTalent.status  = value1['status']
-        state.currentTalent.avatar  = value1['guid']
-
-        let v = {
-            modalName: value2,
-            modalValue: true,
-        }
-
-        this.commit('setModalVisibility', v)
+    selectMedia(state, value1) {
+        state.currentMedia = value1
+        state.newMedia = value1
+        console.log(value1)
     },
     setModalVisibility(state, value) {
         let modalName = value['modalName']
         let modalValue = value['modalValue']
-        console.log(state.talents.indexOf(value['talentID']))
+
         state[modalName] = modalValue
     },
     changePageNumber(state, value) {
