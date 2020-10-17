@@ -28,7 +28,7 @@ const getters = {
 }
 
 const actions = {
-    fetchTonesData({ commit, state }) {
+    fetchToneData({ commit, state }) {
 
         axios.get("http://localhost:8000/wp-json/vtm/v1/talent-tones")
             .then(

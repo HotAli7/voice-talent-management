@@ -16,5 +16,6 @@ const routes = [
 export default new VueRouter({
     mode: 'history',
     base: '/',
-    routes
+    routes,
+    linkActiveClass: "bg-white focus:outline-none focus:text-gray-800 focus:bg-white"
 })

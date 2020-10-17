@@ -48,6 +48,7 @@
                 </div>
             </div>
         </div>
+        <AccentModal />
     </div>
 </template>
 
@@ -56,10 +57,12 @@
     import { mapGetters, mapActions } from 'vuex'
 
     import Alert from "../modal/Alert";
+    import AccentModal from "../modal/AccentModal";
 
     export default {
         name: "Accents",
         components: {
+            AccentModal,
             Alert,
         },
         data() {

@@ -20,9 +20,6 @@
                     <Platforms/>
                 </li>
                 <li class="mt-10 md:mt-0">
-                    <Genders/>
-                </li>
-                <li class="mt-10 md:mt-0">
                     <Ages/>
                 </li>
                 <li class="mt-10 md:mt-0">

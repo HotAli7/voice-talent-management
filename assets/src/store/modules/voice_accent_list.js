@@ -1,10 +1,8 @@
 function initialState() {
     return {
         accents: [],
-        currentAccentData: {
-            accent: "",
-            accent_id: ""
-        },
+        currentAccent: [],
+        newAccent: [],
         errorMsg: false,
         successMsg: false,
         showAddModal: false,
@@ -14,13 +12,9 @@ function initialState() {
 }
 
 const getters = {
-    accents: state => {
-        let accentData = state.accents
-        return accentData
-    },
-
-    currentAccent: state => state.currentAccentData,
-
+    accents:            state => state.accents,
+    currentAccent:      state => state.currentAccent,
+    newAccent:          state => state.newAccent,
     errorMsg:           state => state.errorMsg,
     successMsg:         state => state.successMsg,
     showAddModal:       state => state.showAddModal,
@@ -30,7 +24,6 @@ const getters = {
 
 const actions = {
     fetchAccentData({ commit, state }) {
-
         axios.get("http://localhost:8000/wp-json/vtm/v1/talent-accents")
             .then(
                 function(response) {
@@ -49,7 +42,108 @@ const actions = {
                 console.log(message)
             })
     },
-
+    insertAccent({ commit, state, dispatch }) {
+        let params = _.cloneDeep(state.newAccent)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/insert-accent", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showAddModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchData')
+                    }
+                })
+            .catch(error => {
+                let message = error.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
+    updateAccent({ commit, state, dispatch }) {
+        let params = _.cloneDeep(state.newAccent)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/update-accent", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showEditModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchData')
+                    }
+                })
+            .catch(error => {
+                let message = error.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
+    deleteAccent({ commit, state, dispatch }) {
+        let params = _.cloneDeep(state.currentAccent)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/delete-accent", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showDeleteModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchData')
+                    }
+                })
+            .catch(error => {
+                let message = error.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
     selectAccent({ commit }, value1, value2) {
         commit('selectAccent', value1, value2)
     },
@@ -79,8 +173,13 @@ const mutations = {
     setModalVisibility(state, value) {
         let modalName = value['modalName']
         let modalValue = value['modalValue']
-        console.log(state.talents.indexOf(value['talentID']))
         state[modalName] = modalValue
+    },
+    setSuccessMessage(state, value) {
+        state.successMsg = value
+    },
+    setErrorMessage(state, value) {
+        state.errorMsg = value
     },
     resetState(state) {
         state = Object.assign(state, initialState())

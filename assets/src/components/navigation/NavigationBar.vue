@@ -16,7 +16,7 @@
                 <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                     <div class="hidden sm:block sm:ml-6">
                         <div class="flex">
-                            <router-link :to="{ name:'voicetalent.index' }" class="px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-800 bg-white focus:outline-none focus:text-gray-800 focus:bg-white transition duration-150 ease-in-out">Voice Talents</router-link>
+                            <router-link :to="{ name:'voicetalent.index' }" class="px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-800 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-gray-800 focus:bg-white transition duration-150 ease-in-out">Voice Talents</router-link>
                             <router-link :to="{ name:'voicemedia.index' }" class="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-800 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-gray-800 focus:bg-white transition duration-150 ease-in-out">Media Library</router-link>
                             <router-link :to="{ name:'setting.index' }" class="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-800 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-gray-800 focus:bg-white transition duration-150 ease-in-out">Settings</router-link>
                             <a href="#" class="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-800 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-gray-800 focus:bg-white transition duration-150 ease-in-out">Help</a>
