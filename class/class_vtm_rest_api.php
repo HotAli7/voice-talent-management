@@ -353,13 +353,13 @@ class ClassVTMRestAPI
         $result = array('error'=>false);
 
         $age = ucwords(strtolower($request['age']));
-        $age_id = $request["age_id"];
+        $id_age = $request["id_age"];
 
-        if (isset($request['age_id']) && ($request['age_id'] != '')) {
+        if (isset($request['id_age']) && ($request['id_age'] != '')) {
             $wpdb->update(
                 $tbl_age, //table
                 array('age' => $age), //data
-                array("id_age" => $age_id)
+                array("id_age" => $id_age)
             );
             $result['message'] = "Age group updated";
         } else {
@@ -376,14 +376,14 @@ class ClassVTMRestAPI
         $tbl_media = $db_prefix . "lfm_media_files";
         $result = array('error'=>false);
 
-        $age_id = $request["age_id"];
+        $id_age = $request["id_age"];
         // check if any media is associated with this ageid
-        $sql = "select count(id_media) as total from $tbl_media where age = $age_id";
+        $sql = "select count(id_media) as total from $tbl_media where age = $id_age";
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
         if ($db_data[0]['total'] == 0) {
             $wpdb->delete(
                 $tbl_age,
-                array("id_age" => $age_id)
+                array("id_age" => $id_age)
             );
             $result['message'] = "Age group deleted";
         } else {

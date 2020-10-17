@@ -1,9 +1,10 @@
 function initialState() {
     return {
         ages: [],
-        currentAgeData: {
-            age: "",
-            age_id: ""
+        currentAge: [],
+        newAge: {
+            id_age: "",
+            age: ""
         },
         errorMsg: false,
         successMsg: false,
@@ -14,13 +15,9 @@ function initialState() {
 }
 
 const getters = {
-    ages: state => {
-        let ageData = state.ages
-        return ageData
-    },
-
-    currentAge: state => state.currentAgeData,
-
+    ages:            state => state.ages,
+    currentAge:      state => state.currentAge,
+    newAge:          state => state.newAge,
     errorMsg:           state => state.errorMsg,
     successMsg:         state => state.successMsg,
     showAddModal:       state => state.showAddModal,
@@ -30,7 +27,6 @@ const getters = {
 
 const actions = {
     fetchAgeData({ commit, state }) {
-
         axios.get("http://localhost:8000/wp-json/vtm/v1/talent-age-group")
             .then(
                 function(response) {
@@ -49,12 +45,122 @@ const actions = {
                 console.log(message)
             })
     },
-
+    insertAge({ commit, state, dispatch }) {
+        let params = _.cloneDeep(state.newAge)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/insert-age", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showAddModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchAgeData')
+                    }
+                })
+            .catch(error => {
+                let message = error.response.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
+    updateAge({ commit, state, dispatch }) {
+        let params = _.cloneDeep(state.newAge)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/update-age", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showEditModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchAgeData')
+                    }
+                })
+            .catch(error => {
+                console.log(error)
+                let message = error.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
+    deleteAge({ commit, state, dispatch }) {
+        let params = _.cloneDeep(state.currentAge)
+        const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let formData = new FormData();
+        Object.keys(params).forEach(function (key) {
+            if(params[key] !== null)
+            {
+                formData.append(key, params[key]);
+            }
+        });
+        axios.post("http://localhost:8000/wp-json/vtm/v1/delete-age", formData, config)
+            .then(
+                function(response) {
+                    if (response.data.error) {
+                        app.errorMsg = response.data.message;
+                    }
+                    else
+                    {
+                        let v = {
+                            modalName: "showDeleteModal",
+                            modalValue: false,
+                        }
+                        commit('setModalVisibility', v)
+                        dispatch('fetchAgeData')
+                    }
+                })
+            .catch(error => {
+                let message = error.data.message || error.message
+                commit('setError', message)
+                console.log(message)
+            })
+    },
+    selectAge({ commit }, { value1, value2 }) {
+        commit('selectAge', value1)
+        let v = {
+            modalName: value2,
+            modalValue: true,
+        }
+        commit('setModalVisibility', v)
+    },
+    setAge({ commit }, value) {
+        commit('setAge', value)
+    },
     setModalVisibility({ commit }, value) {
         commit('setModalVisibility', value)
-    },
-    selectAge({ commit }, value1, value2) {
-        commit('selectAge', value1, value2)
     },
     resetState({ commit }) {
         commit('resetState')
@@ -65,22 +171,23 @@ const mutations = {
     setAgeData(state, items) {
         state.ages = items
     },
-    selectAge(state, value1, value2) {
-        state.currentAccent.accent      = value1['accent']
-        state.currentAccent.accent_id   = value1['id_accent']
-
-        let v = {
-            modalName: value2,
-            modalValue: true,
-        }
-
-        this.commit('setModalVisibility', v)
+    selectAge(state, value) {
+        state.currentAge = value
+        state.newAge = value
+    },
+    setAge(state, value) {
+        state.newAge.age = value
     },
     setModalVisibility(state, value) {
         let modalName = value['modalName']
         let modalValue = value['modalValue']
-        console.log(state.talents.indexOf(value['talentID']))
         state[modalName] = modalValue
+    },
+    setSuccessMessage(state, value) {
+        state.successMsg = value
+    },
+    setErrorMessage(state, value) {
+        state.errorMsg = value
     },
     resetState(state) {
         state = Object.assign(state, initialState())
