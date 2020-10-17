@@ -8,10 +8,10 @@
             <span class="inline-block w-full rounded-md shadow-sm">
                 <button type="button" @click="openDropdown" aria-haspopup="listbox" aria-expanded="true"
                         aria-labelledby="listbox-label"
-                        class="cursor-pointer relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                    <div class="flex items-center space-x-3">
+                        class="cursor-pointer relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5 h-10">
+                    <div class="flex items-center space-x-3" v-if="selectedTalent">
                         <img :src="selectedTalent.guid"
-                             alt="" class="flex-shrink-0 h-6 w-6 rounded-full"/>
+                             alt="" class="flex-shrink-0 h-6 w-6 rounded-full" />
                         <span class="block truncate">
                             {{ selectedTalent.talent_name }} - {{selectedTalent.gender}} - {{selectedTalent.age}}
                         </span>
@@ -82,7 +82,6 @@
             },
             select(value) {
                 this.isOpen = false;
-                console.log(value)
                 this.setSelectedTalent(value)
                 this.setTalent(value)
             }
