@@ -879,7 +879,7 @@ class ClassVTMRestAPI
         $tbl_tone = $db_prefix . "lfm_tones";
         $result = array('error'=>false);
 
-        $tone_id = $request["tone_id"];
+        $id_tone = $request["id_tone"];
 
         $tone = ucwords(strtolower($request['tone']));
         // check if already exists
@@ -890,7 +890,7 @@ class ClassVTMRestAPI
             $wpdb->update(
                 $tbl_tone, //table
                 array('tone' => $tone), //data
-                array('id_tone' => $tone_id)
+                array('id_tone' => $id_tone)
             );
             $result['message'] = "Tone updated";
         } else {
@@ -907,14 +907,14 @@ class ClassVTMRestAPI
         $tbl_media = $db_prefix . "lfm_media_files";
         $result = array('error'=>false);
 
-        $tone_id = $request["tone_id"];
-        // check if any media is associated with this tone_id
-        $sql = "select count(id_media) as total from $tbl_media where tone = $tone_id";
+        $id_tone = $request["id_tone"];
+        // check if any media is associated with this id_tone
+        $sql = "select count(id_media) as total from $tbl_media where tone = $id_tone";
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
         if ($db_data[0]['total'] == 0) {
             $wpdb->delete(
                 $tbl_tone,
-                array("id_tone" => $tone_id)
+                array("id_tone" => $id_tone)
             );
             $result['message'] = "Tone deleted";
         } else {
