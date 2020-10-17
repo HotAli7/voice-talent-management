@@ -77,7 +77,7 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.data.message || error.message
+                let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
@@ -96,7 +96,7 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.data.message || error.message
+                let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
@@ -131,7 +131,7 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.data.message || error.message
+                let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
@@ -166,14 +166,14 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.data.message || error.message
+                let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
     },
     deleteTalent({ commit, state, dispatch }) {
 
-        let params = _.cloneDeep(state.newTalent)
+        let params = _.cloneDeep(state.currentTalent)
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -201,7 +201,7 @@ const actions = {
                     }
                 })
             .catch(error => {
-                message = error.data.message || error.message
+                let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })

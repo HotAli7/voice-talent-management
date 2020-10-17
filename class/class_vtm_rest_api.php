@@ -497,7 +497,7 @@ class ClassVTMRestAPI
         // if no order, default to asc
         $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
 
-        $sql = "SELECT a.id_media, a.id_voice_talent, a.description, b.accent, c.language, d.platform, e.tone, f.style, g.talent_name, h.gender, i.age, j.guid, k.guid as avatar
+        $sql = "SELECT a.id_media, a.id_voice_talent, a.description, b.*, c.*, d.*, e.*, f.*, g.talent_name, h.gender, i.age, j.guid, k.guid as avatar
 					FROM {$db_prefix}lfm_media_files a 
 					left join {$db_prefix}lfm_accents b on a.accent = b.id_accent
 					left join {$db_prefix}lfm_languages c on a.language = c.id_language 
@@ -537,17 +537,17 @@ class ClassVTMRestAPI
                 $result['error'] = true;
                 $result['message'] = "Error uploading file: " . $uploaded->get_error_message();
             } else {
-                $talent_id = ucwords(strtolower($request['talent_name']));
+                $talent_id = ucwords(strtolower($request['talent_id']));
                 $wpdb->insert(
                     $tbl_media, //table
                     array(
                         'id_voice_talent'   => $talent_id,
                         'id_media'          => $uploaded,
-                        'accent'            => $request['accent'],
-                        'language'          => $request['language'],
-                        'platform'          => $request['platform'],
-                        'style'             => $request['style'],
-                        'tone'              => $request['tone'],
+                        'accent'            => $request['id_accent'],
+                        'language'          => $request['id_language'],
+                        'platform'          => $request['id_platform'],
+                        'style'             => $request['id_style'],
+                        'tone'              => $request['id_tone'],
                         'description'       => $request['description']),
                     array('%s') //data format
                 );
@@ -575,27 +575,44 @@ class ClassVTMRestAPI
                 $result['error'] = true;
                 $result['message'] = "Error uploading file: " . $uploaded->get_error_message();
             } else {
-                $media_id = $request['media_id'];
-                $talent_id = ucwords(strtolower($request['talent_name']));
+                $media_id = $request['id_media'];
+                $talent_id = ucwords(strtolower($request['id_voice_talent']));
                 $wpdb->update(
                     $tbl_media, //table
                     array(
                         'id_voice_talent'   => $talent_id,
                         'id_media'          => $uploaded,
-                        'accent'            => $request['accent'],
-                        'language'          => $request['language'],
-                        'platform'          => $request['platform'],
-                        'style'             => $request['style'],
-                        'tone'              => $request['tone'],
+                        'accent'            => $request['id_accent'],
+                        'language'          => $request['id_language'],
+                        'platform'          => $request['id_platform'],
+                        'style'             => $request['id_style'],
+                        'tone'              => $request['id_tone'],
                         'description'       => $request['description']),
                     array('id_media' => $media_id)
                 );
-                $result['message'] = "Voice talent media file added";
+
             }
         } else {
-            $result['message'] = "Can't find Media file";
-            $result['error'] = true;
+            $media_id = $request['id_media'];
+            $talent_id = ucwords(strtolower($request['id_voice_talent']));
+            $wpdb->update(
+                $tbl_media, //table
+                array(
+                    'id_voice_talent'   => $talent_id,
+                    'accent'            => $request['id_accent'],
+                    'language'          => $request['id_language'],
+                    'platform'          => $request['id_platform'],
+                    'style'             => $request['id_style'],
+                    'tone'              => $request['id_tone'],
+                    'description'       => $request['description']),
+                array('id_media' => $media_id)
+            );
         }
+        $result['message'] = "Voice talent media file edited";
+        $response = new WP_REST_Response($result);
+        $response->set_status(200);
+
+        return $response;
     }
 
     public function delete_media($request) {
@@ -604,7 +621,7 @@ class ClassVTMRestAPI
         $tbl_media = $db_prefix . "lfm_media_files";
         $result = array('error'=>false);
 
-        $media_id = $request["media_id"];
+        $media_id = $request["id_media"];
         $wpdb->delete(
             $tbl_media,
             array("id_media" => $media_id)

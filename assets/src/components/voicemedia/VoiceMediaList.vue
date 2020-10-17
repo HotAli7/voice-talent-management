@@ -104,11 +104,10 @@
         },
         methods: {
             ...mapActions('VoiceMediaList', ['fetchData', 'resetState', 'setModalVisibility', 'selectMedia']),
-            updateModalVisibility(modalName, modalValue, talentID=0) {
+            updateModalVisibility(modalName, modalValue) {
                 let v = {
                         modalName: modalName,
-                        modalValue: modalValue,
-                        talentID: talentID
+                        modalValue: modalValue
                     }
                 this.setModalVisibility(v)
             }

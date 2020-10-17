@@ -55,7 +55,7 @@
         destroyed() {
         },
         computed: {
-            ...mapGetters('VoiceTalentList', ['currentTalent']),
+            ...mapGetters('VoiceTalentList', ['currentTalent', 'showDeleteModal']),
         },
         methods: {
             ...mapActions('VoiceTalentList', ['setModalVisibility', 'deleteTalent']),

@@ -21,6 +21,7 @@
     "vue": "^2.6.12",
     "vue-axios": "^2.1.5",
     "vue-cli": "^2.9.6",
+    "vue-click-outside": "^1.1.0",
     "vue-loader": "^15.9.3",
     "vue-router": "^3.4.5",
     "vue-select": "^3.10.8",
