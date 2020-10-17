@@ -2,7 +2,10 @@ function initialState() {
     return {
         accents: [],
         currentAccent: [],
-        newAccent: [],
+        newAccent: {
+            id_accent: "",
+            accent: ""
+        },
         errorMsg: false,
         successMsg: false,
         showAddModal: false,

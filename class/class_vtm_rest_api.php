@@ -447,13 +447,13 @@ class ClassVTMRestAPI
         $result = array('error'=>false);
 
         $language = ucwords(strtolower($request['language']));
-        $language_id = $request["language_id"];
+        $id_language = $request["id_language"];
 
-        if (isset($request['language_id']) && ($request['language_id'] != '')) {
+        if (isset($request['id_language']) && ($request['id_language'] != '')) {
             $wpdb->update(
                 $tbl_language, //table
                 array('language' => $language), //data
-                array("id_language" => $language_id)
+                array("id_language" => $id_language)
             );
             $result['message'] = "Language updated";
         } else {
@@ -470,14 +470,14 @@ class ClassVTMRestAPI
         $tbl_media = $db_prefix . "lfm_media_files";
         $result = array('error'=>false);
 
-        $language_id = $request["language_id"];
-        // check if any media is associated with this language_id
-        $sql = "select count(id_media) as total from $tbl_media where language = $language_id";
+        $id_language = $request["id_language"];
+        // check if any media is associated with this id_language
+        $sql = "select count(id_media) as total from $tbl_media where language = $id_language";
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
         if ($db_data[0]['total'] == 0) {
             $wpdb->delete(
                 $tbl_language,
-                array("id_language" => $language_id)
+                array("id_language" => $id_language)
             );
             $result['message'] = "Language deleted";
         } else {
@@ -960,7 +960,7 @@ class ClassVTMRestAPI
         if (count($db_data) == 0) {
             $wpdb->insert(
                 $tbl_accent, //table
-                array('style' => $accent), //data
+                array('accent' => $accent), //data
                 array('%s') //data format
             );
             $result['message'] = "Accent added";
@@ -977,7 +977,7 @@ class ClassVTMRestAPI
         $tbl_accent = $db_prefix . "lfm_accents";
         $result = array('error'=>false);
 
-        $accent_id = $request["accent_id"];
+        $accent_id = $request["id_accent"];
 
         $accent = ucwords(strtolower($request['accent']));
         // check if already exists
