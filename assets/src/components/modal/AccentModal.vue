@@ -10,7 +10,7 @@
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
                 <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                     <div class="bg-blue-100 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg leading-6 font-bold text-blue-700 text-center" id="modal-headline">
+                        <h3 class="text-lg leading-6 font-bold text-blue-700 text-center">
                             Add New Accent
                         </h3>
                     </div>
@@ -21,7 +21,7 @@
                                     <div class="mt-4 flex flex-col justify-center items-center">
                                     </div>
                                     <div class="mt-4">
-                                        <input aria-label="Accent" name="accent" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Accent" @change="updateAccent($event)">
+                                        <input aria-label="Accent" name="accent" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Accent" @change="editAccent($event)">
                                     </div>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
                 <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                     <div class="bg-blue-100 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg leading-6 font-bold text-blue-700 text-center" id="modal-headline">
+                        <h3 class="text-lg leading-6 font-bold text-blue-700 text-center">
                             Edit Accent
                         </h3>
                     </div>
@@ -60,33 +60,8 @@
                         <div class="sm:flex sm:items-start">
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <div class="mt-2">
-                                    <div class="mt-4 flex flex-col justify-center items-center">
-                                        <div class="relative w-24 h-24 rounded-full border border-gray-200 overflow-hidden">
-                                            <img id="output_avatar" width="200" :src="currentAccent.avatar" />
-                                            <input type="file"  accept="image/*" name="avatar" id="avatar"  @change="loadAvatar($event)" class="hidden">
-                                            <label for="avatar" class="absolute top-0 flex justify-center items-center w-full h-full cursor-pointer bg-gray-300 opacity-0 hover:opacity-75 transition-all duration-300 ease-in-out z-10" ><i class="fa fa-plus text-2xl"></i></label>
-                                        </div>
-                                    </div>
                                     <div class="mt-4">
-                                        <input aria-label="Name" name="name" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Name" :value="currentAccent.name" @change="updateName($event)">
-                                    </div>
-                                    <div class="mt-4">
-                                        <select aria-label="Gender" name="gender" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateGender($event)">
-                                            <option value="">Gender</option>
-                                            <option :value="g.id" :selected="currentAccent.gender === g.id" v-for="g in gender">{{g.name}}</option>
-                                        </select>
-                                    </div>
-                                    <div class="mt-4">
-                                        <select aria-label="Age" name="age" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateAge($event)">
-                                            <option value="">Age</option>
-                                            <option :value="age.id_age" :selected="currentAccent.age === age.id_age" v-for="age in ageGroup">{{age.age}}</option>
-                                        </select>
-                                    </div>
-                                    <div class="mt-4">
-                                        <select aria-label="Statue" name="statue" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateStatus($event)">
-                                            <option value="">Status</option>
-                                            <option :value="s.id" :selected="currentAccent.status === s.id" v-for="s in status">{{s.name}}</option>
-                                        </select>
+                                        <input aria-label="Accent" name="accent" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Accent" @change="editAccent($event)" :value="currentAccent.accent">
                                     </div>
                                 </div>
                             </div>
@@ -120,11 +95,11 @@
                         <div class="sm:flex sm:items-start">
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                                    Delete Accent <span class="text-red-500">{{currentAccent.name}}</span>
+                                    Delete Accent <span class="text-red-500">{{currentAccent.accent}}</span>
                                 </h3>
                                 <div class="mt-2">
                                     <p class="text-sm leading-5 text-gray-500">
-                                        Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.
+                                        Are you sure you want to delete this accent? All of your data will be permanently removed. This action cannot be undone.
                                     </p>
                                 </div>
                             </div>
@@ -149,8 +124,36 @@
 </template>
 
 <script>
+    import {mapActions, mapGetters} from "vuex";
+
     export default {
-        name: "AccentModal"
+        name: "AccentModal",
+
+        data() {
+            return {
+
+            }
+        },
+        created() {
+        },
+        destroyed() {
+        },
+        computed: {
+            ...mapGetters('VoiceAccentList', ['showAddModal', 'showEditModal', 'showDeleteModal', 'currentAccent']),
+        },
+        methods: {
+            ...mapActions('VoiceAccentList', ['setModalVisibility', 'insertAccent', 'updateAccent', 'deleteAccent', 'setAccent']),
+            updateModalVisibility(modalName, modalValue) {
+                let v = {
+                    modalName: modalName,
+                    modalValue: modalValue,
+                }
+                this.setModalVisibility(v)
+            },
+            editAccent(event) {
+                this.setAccent(event.target.value)
+            }
+        }
     }
 </script>
 

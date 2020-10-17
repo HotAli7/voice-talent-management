@@ -67,11 +67,11 @@ const actions = {
                             modalValue: false,
                         }
                         commit('setModalVisibility', v)
-                        dispatch('fetchData')
+                        dispatch('fetchAccentData')
                     }
                 })
             .catch(error => {
-                let message = error.data.message || error.message
+                let message = error.response.data.message || error.message
                 commit('setError', message)
                 console.log(message)
             })
@@ -101,10 +101,11 @@ const actions = {
                             modalValue: false,
                         }
                         commit('setModalVisibility', v)
-                        dispatch('fetchData')
+                        dispatch('fetchAccentData')
                     }
                 })
             .catch(error => {
+                console.log(error)
                 let message = error.data.message || error.message
                 commit('setError', message)
                 console.log(message)
@@ -135,7 +136,7 @@ const actions = {
                             modalValue: false,
                         }
                         commit('setModalVisibility', v)
-                        dispatch('fetchData')
+                        dispatch('fetchAccentData')
                     }
                 })
             .catch(error => {
@@ -144,8 +145,16 @@ const actions = {
                 console.log(message)
             })
     },
-    selectAccent({ commit }, value1, value2) {
-        commit('selectAccent', value1, value2)
+    selectAccent({ commit }, { value1, value2 }) {
+        commit('selectAccent', value1)
+        let v = {
+            modalName: value2,
+            modalValue: true,
+        }
+        commit('setModalVisibility', v)
+    },
+    setAccent({ commit }, value) {
+        commit('setAccent', value)
     },
     setModalVisibility({ commit }, value) {
         commit('setModalVisibility', value)
@@ -159,16 +168,12 @@ const mutations = {
     setAccentData(state, items) {
         state.accents = items
     },
-    selectAccent(state, value1, value2) {
-        state.currentAccent.accent      = value1['accent']
-        state.currentAccent.accent_id   = value1['id_accent']
-
-        let v = {
-            modalName: value2,
-            modalValue: true,
-        }
-
-        this.commit('setModalVisibility', v)
+    selectAccent(state, value) {
+        state.currentAccent = value
+        state.newAccent = value
+    },
+    setAccent(state, value) {
+        state.newAccent.accent = value
     },
     setModalVisibility(state, value) {
         let modalName = value['modalName']

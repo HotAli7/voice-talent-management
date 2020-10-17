@@ -1005,7 +1005,7 @@ class ClassVTMRestAPI
         $tbl_media = $db_prefix . "lfm_media_files";
         $result = array('error'=>false);
 
-        $accent_id = $request["accent_id"];
+        $accent_id = $request["id_accent"];
         // check if any media is associated with this accent_id
         $sql = "select count(id_media) as total from $tbl_media where accent = $accent_id";
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
