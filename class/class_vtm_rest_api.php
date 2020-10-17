@@ -685,7 +685,7 @@ class ClassVTMRestAPI
         $result = array('error'=>false);
 
         $platform = ucwords(strtolower($request['platform']));
-        $platform_id = $request["platform_id"];
+        $id_platform = $request["id_platform"];
 
         $sql = "select platform from $tbl_platform where platform = '$platform'";
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
@@ -694,7 +694,7 @@ class ClassVTMRestAPI
             $wpdb->update(
                 $tbl_platform, //table
                 array('platform' => $platform), //data
-                array("id_platform" => $platform_id)
+                array("id_platform" => $id_platform)
             );
             $result['message'] = "Platform updated";
         } else {
@@ -711,14 +711,14 @@ class ClassVTMRestAPI
         $tbl_media = $db_prefix . "lfm_media_files";
         $result = array('error'=>false);
 
-        $platform_id = $request["platform_id"];
-        // check if any media is associated with this platform_id
-        $sql = "select count(id_media) as total from $tbl_media where platform=$platform_id";
+        $id_platform = $request["id_platform"];
+        // check if any media is associated with this id_platform
+        $sql = "select count(id_media) as total from $tbl_media where platform=$id_platform";
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
         if ($db_data[0]['total'] == 0) {
             $wpdb->delete(
                 $tbl_platform,
-                array("id_platform" => $platform_id)
+                array("id_platform" => $id_platform)
             );
             $result['message'] = "Platform deleted";
         } else {
