@@ -781,7 +781,7 @@ class ClassVTMRestAPI
         $tbl_style = $db_prefix . "lfm_styles";
         $result = array('error'=>false);
 
-        $style_id = $request["style_id"];
+        $id_style = $request["id_style"];
 
         $style = ucwords(strtolower($request['style']));
         // check if already exists
@@ -792,7 +792,7 @@ class ClassVTMRestAPI
             $wpdb->update(
                 $tbl_style, //table
                 array('style' => $style), //data
-                array('id_style' => $style_id)
+                array('id_style' => $id_style)
             );
             $result['message'] = "Style updated";
         } else {
@@ -809,14 +809,14 @@ class ClassVTMRestAPI
         $tbl_media = $db_prefix . "lfm_media_files";
         $result = array('error'=>false);
 
-        $style_id = $request["style_id"];
-        // check if any media is associated with this style_id
-        $sql = "select count(id_media) as total from $tbl_media where style = $style_id";
+        $id_style = $request["id_style"];
+        // check if any media is associated with this id_style
+        $sql = "select count(id_media) as total from $tbl_media where style = $id_style";
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
         if ($db_data[0]['total'] == 0) {
             $wpdb->delete(
                 $tbl_style,
-                array("id_style" => $style_id)
+                array("id_style" => $id_style)
             );
             $result['message'] = "Style deleted";
         } else {

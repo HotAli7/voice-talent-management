@@ -38,8 +38,8 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                                    <button @click="selectStyle(style, 'showEditModal')" class="pr-4 text-indigo-600 hover:text-indigo-900 focus:outline-none"><i class="fa fa-edit pr-2"></i>Edit</button>
-                                    <button @click="selectStyle(style, 'showDeleteModal')" class="text-red-600 hover:text-red-900 focus:outline-none"><i class="fa fa-trash pr-2"></i>Delete</button>
+                                    <button @click="selectStyle({ value1: style, value2: 'showEditModal' })" class="pr-4 text-indigo-600 hover:text-indigo-900 focus:outline-none"><i class="fa fa-edit pr-2"></i>Edit</button>
+                                    <button @click="selectStyle({ value1: style, value2: 'showDeleteModal' })" class="text-red-600 hover:text-red-900 focus:outline-none"><i class="fa fa-trash pr-2"></i>Delete</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -48,6 +48,7 @@
                 </div>
             </div>
         </div>
+        <StyleModal />
     </div>
 </template>
 
@@ -56,10 +57,12 @@
     import { mapGetters, mapActions } from 'vuex'
 
     import Alert from "../modal/Alert";
+    import StyleModal from "../modal/StyleModal";
 
     export default {
         name: "Styles",
         components: {
+            StyleModal,
             Alert,
         },
         data() {
