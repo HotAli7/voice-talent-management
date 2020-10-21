@@ -27,7 +27,7 @@ const getters = {
 
 const actions = {
     fetchStyleData({ commit, state }) {
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-styles")
+        axios.get("/wp-json/vtm/v1/talent-styles")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -57,7 +57,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/insert-style", formData, config)
+        axios.post("/wp-json/vtm/v1/insert-style", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -91,7 +91,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/update-style", formData, config)
+        axios.post("/wp-json/vtm/v1/update-style", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -126,7 +126,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/delete-style", formData, config)
+        axios.post("/wp-json/vtm/v1/delete-style", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {

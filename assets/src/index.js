@@ -30,7 +30,7 @@ var app = new Vue({
     },
     methods: {
         getAllTalents() {
-            axios.get("http://localhost:8000/wp-json/vtm/v1/voice-talents/0/10").then(
+            axios.get("/wp-json/vtm/v1/voice-talents/0/10").then(
             function(response) {
                 if (response.data.error) {
                     app.errorMsg = response.data.message;

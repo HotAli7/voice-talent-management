@@ -65,7 +65,7 @@ const getters = {
 const actions = {
     fetchData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/voice-talents")
+        axios.get("/wp-json/vtm/v1/voice-talents")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -84,7 +84,7 @@ const actions = {
     },
     fetchAgeGroupData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-age-group")
+        axios.get("/wp-json/vtm/v1/talent-age-group")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -114,7 +114,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/insert-talent", formData, config)
+        axios.post("/wp-json/vtm/v1/insert-talent", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -149,7 +149,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/update-talent", formData, config)
+        axios.post("/wp-json/vtm/v1/update-talent", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -184,7 +184,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/delete-talent", formData, config)
+        axios.post("/wp-json/vtm/v1/delete-talent", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {

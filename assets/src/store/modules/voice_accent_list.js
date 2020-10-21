@@ -27,7 +27,7 @@ const getters = {
 
 const actions = {
     fetchAccentData({ commit, state }) {
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-accents")
+        axios.get("/wp-json/vtm/v1/talent-accents")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -57,7 +57,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/insert-accent", formData, config)
+        axios.post("/wp-json/vtm/v1/insert-accent", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -91,7 +91,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/update-accent", formData, config)
+        axios.post("/wp-json/vtm/v1/update-accent", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -126,7 +126,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/delete-accent", formData, config)
+        axios.post("/wp-json/vtm/v1/delete-accent", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {

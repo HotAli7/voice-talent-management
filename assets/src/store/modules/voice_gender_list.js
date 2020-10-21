@@ -30,7 +30,7 @@ const getters = {
 const actions = {
     fetchGenderData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-genders")
+        axios.get("/wp-json/vtm/v1/talent-genders")
             .then(
                 function(response) {
                     if (response.data.error) {

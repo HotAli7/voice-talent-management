@@ -27,7 +27,7 @@ const getters = {
 
 const actions = {
     fetchToneData({ commit, state }) {
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-tones")
+        axios.get("/wp-json/vtm/v1/talent-tones")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -57,7 +57,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/insert-tone", formData, config)
+        axios.post("/wp-json/vtm/v1/insert-tone", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -91,7 +91,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/update-tone", formData, config)
+        axios.post("/wp-json/vtm/v1/update-tone", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -126,7 +126,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/delete-tone", formData, config)
+        axios.post("/wp-json/vtm/v1/delete-tone", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {

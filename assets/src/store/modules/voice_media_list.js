@@ -51,7 +51,7 @@ const getters = {
 const actions = {
     fetchData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-medias")
+        axios.get("/wp-json/vtm/v1/talent-medias")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -70,7 +70,7 @@ const actions = {
     },
     fetchTalentData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/voice-talents")
+        axios.get("/wp-json/vtm/v1/voice-talents")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -89,7 +89,7 @@ const actions = {
     },
     fetchAccentData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-accents")
+        axios.get("/wp-json/vtm/v1/talent-accents")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -108,7 +108,7 @@ const actions = {
     },
     fetchLanguageData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-languages")
+        axios.get("/wp-json/vtm/v1/talent-languages")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -127,7 +127,7 @@ const actions = {
     },
     fetchPlatformData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-platforms")
+        axios.get("/wp-json/vtm/v1/talent-platforms")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -146,7 +146,7 @@ const actions = {
     },
     fetchStyleData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-styles")
+        axios.get("/wp-json/vtm/v1/talent-styles")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -165,7 +165,7 @@ const actions = {
     },
     fetchToneData({ commit, state }) {
 
-        axios.get("http://localhost:8000/wp-json/vtm/v1/talent-tones")
+        axios.get("/wp-json/vtm/v1/talent-tones")
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -195,7 +195,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/insert-media", formData, config)
+        axios.post("/wp-json/vtm/v1/insert-media", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -230,7 +230,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/update-media", formData, config)
+        axios.post("/wp-json/vtm/v1/update-media", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
@@ -265,7 +265,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
-        axios.post("http://localhost:8000/wp-json/vtm/v1/delete-media", formData, config)
+        axios.post("/wp-json/vtm/v1/delete-media", formData, config)
             .then(
                 function(response) {
                     if (response.data.error) {
