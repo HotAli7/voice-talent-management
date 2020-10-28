@@ -1,10 +1,13 @@
 <template>
     <div class="container my-5">
         <div class="flex justify-between mb-6 px-6 container">
-            <h3 class="text-blue-600 text-xl font-bold py-2 px-4 m-2">Uploaded Talent Voice</h3>
-            <button class="transition duration-500 ease-in-out bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded" @click="updateModalVisibility('showAddModal', true)">
-                <i class="fa fa-music"></i><span class="ml-2 uppercase">add new media</span>
-            </button>
+            <h3 class="text-blue-600 text-xl font-bold py-2 px-4 m-2 w-2/5">Uploaded Talent Voice</h3>
+            <div class="sm:ml-6 flex items-end w-3/5 py-2 px-4 m-2">
+                <input data-v-57d7188b="" aria-label="Search" name="key" type="text" required="required" placeholder="Search" class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 w-3/5" :value="key" @change="updateSearchKey($event)">
+                <button class="transition duration-500 ease-in-out bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded w-2/5 ml-6" @click="updateModalVisibility('showAddModal', true)">
+                    <i class="fa fa-music"></i><span class="ml-2 uppercase">add new media</span>
+                </button>
+            </div>
         </div>
         <hr class="bg-blue-500 mb-6">
         <Alert :errorMsg="errorMsg" :successMsg="successMsg" />
@@ -100,16 +103,20 @@
             this.resetState()
         },
         computed: {
-            ...mapGetters('VoiceMediaList', ['medias', 'total', 'errorMsg', 'successMsg', 'currentPage', 'pageSize']),
+            ...mapGetters('VoiceMediaList', ['medias', 'total', 'errorMsg', 'successMsg', 'currentPage', 'pageSize', 'key']),
         },
         methods: {
-            ...mapActions('VoiceMediaList', ['fetchData', 'resetState', 'setModalVisibility', 'selectMedia']),
+            ...mapActions('VoiceMediaList', ['fetchData', 'resetState', 'setModalVisibility', 'selectMedia', 'setSearchKey']),
             updateModalVisibility(modalName, modalValue) {
                 let v = {
                         modalName: modalName,
                         modalValue: modalValue
                     }
                 this.setModalVisibility(v)
+            },
+            updateSearchKey(event)
+            {
+                this.setSearchKey(event.target.value)
             }
         }
     }

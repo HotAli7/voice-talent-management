@@ -93,7 +93,7 @@ class LFMAudioVTM {
         {
             wp_deregister_style('wp-admin');
             wp_enqueue_script('vtm_script', VTM_PLUGIN_URL . 'assets/dist/main.min.js', ['jquery'], "", true);
-            //wp_enqueue_style('vtm_style', VTM_PLUGIN_URL . 'assets/dist/main.css', []);
+//            wp_enqueue_style('vtm_style', VTM_PLUGIN_URL . 'assets/dist/main.css', []);
         }
     }
 

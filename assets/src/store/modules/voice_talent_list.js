@@ -1,6 +1,7 @@
 function initialState() {
     return {
         talents: [],
+        talentAll: [],
         ageGroup: [],
         newTalent: {
             id: "",
@@ -33,17 +34,24 @@ function initialState() {
         showEditModal: false,
         showDeleteModal: false,
         currentPage: 0,
-        pageSize: 10
+        pageSize: 10,
+        key: ""
     }
 }
 
 const getters = {
     data: state => {
-        let firstSliceNumber = state.currentPage*state.pageSize+1
+        let firstSliceNumber = state.currentPage*state.pageSize
         let lastSliceNumber = (state.currentPage+1)*state.pageSize
-        let rows = state.talents.slice(firstSliceNumber, lastSliceNumber)
+        let rows = [];
+        if (state.talents.length != 0)
+        {
+            rows = state.talents.slice(firstSliceNumber, lastSliceNumber)
+        }
+
         return rows
     },
+    talentAll: state => state.talents,
     ageGroup: state => {
         let ageGroupData = state.ageGroup
         return ageGroupData
@@ -59,7 +67,8 @@ const getters = {
     showEditModal:      state => state.showEditModal,
     showDeleteModal:    state => state.showDeleteModal,
     currentPage:        state => state.currentPage,
-    pageSize:           state => state.pageSize
+    pageSize:           state => state.pageSize,
+    key:                state => state.key
 }
 
 const actions = {
@@ -235,6 +244,9 @@ const actions = {
     setStatus({ commit }, value) {
         commit('setStatus', value)
     },
+    setSearchKey({ commit }, value) {
+        commit('setSearchKey', value)
+    },
     resetState({ commit }) {
         commit('resetState')
     }
@@ -243,6 +255,7 @@ const actions = {
 const mutations = {
     setAll(state, items) {
         state.talents = items
+        state.talentAll = items
     },
     setAgeGroup(state, items) {
         state.ageGroup = items
@@ -285,6 +298,20 @@ const mutations = {
     },
     setStatus(state, value) {
         state.newTalent.status = value
+    },
+    setSearchKey(state, value) {
+        state.key = value
+
+        if (state.talentAll.length != 0)
+        {
+            if (state.key != "")
+            {
+                state.talents = state.talentAll.filter(talent => {
+                    return talent.talent_name.toLowerCase().includes(state.key.toLowerCase());
+                });
+                state.currentPage = 0
+            }
+        }
     },
     resetState(state) {
         state = Object.assign(state, initialState())

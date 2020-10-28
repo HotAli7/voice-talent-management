@@ -2,6 +2,7 @@ function initialState() {
     return {
         talents: [],
         medias: [],
+        mediaAll:[],
         ageGroup: [],
         accents: [],
         languages: [],
@@ -17,17 +18,24 @@ function initialState() {
         showEditModal: false,
         showDeleteModal: false,
         currentPage: 0,
-        pageSize: 10
+        pageSize: 10,
+        key: ""
     }
 }
 
 const getters = {
     medias: state => {
-        let firstSliceNumber = state.currentPage*state.pageSize+1
+        let firstSliceNumber = state.currentPage*state.pageSize
         let lastSliceNumber = (state.currentPage+1)*state.pageSize
-        let rows = state.medias.slice(firstSliceNumber, lastSliceNumber)
+        let rows = []
+        if (state.medias.length != 0)
+        {
+            rows = state.medias.slice(firstSliceNumber, lastSliceNumber)
+        }
+
         return rows
     },
+    mediaAll:           state => state.mediaAll,
     ageGroup:           state => state.ageGroup,
     talents:            state => state.talents,
     accents:            state => state.accents,
@@ -45,7 +53,8 @@ const getters = {
     showEditModal:      state => state.showEditModal,
     showDeleteModal:    state => state.showDeleteModal,
     currentPage:        state => state.currentPage,
-    pageSize:           state => state.pageSize
+    pageSize:           state => state.pageSize,
+    key:                state => state.key
 }
 
 const actions = {
@@ -325,6 +334,9 @@ const actions = {
     changePageNumber({ commit }, value) {
         commit('changePageNumber', value)
     },
+    setSearchKey({ commit }, value) {
+        commit('setSearchKey', value)
+    },
     resetState({ commit }) {
         commit('resetState')
     }
@@ -333,6 +345,7 @@ const actions = {
 const mutations = {
     setAll(state, items) {
         state.medias = items
+        state.mediaAll = items
     },
     setTalentData(state, items) {
         state.talents = items
@@ -390,6 +403,20 @@ const mutations = {
     },
     changePageNumber(state, value) {
         state.currentPage = value
+    },
+    setSearchKey(state, value) {
+        state.key = value
+
+        if (state.mediaAll.length != 0)
+        {
+            if (state.key != "")
+            {
+                state.medias = state.mediaAll.filter(media => {
+                    return media.platform.toLowerCase().includes(state.key.toLowerCase());
+                });
+                state.currentPage = 0
+            }
+        }
     },
     resetState(state) {
         state = Object.assign(state, initialState())
