@@ -23,36 +23,5 @@ var app = new Vue({
     el: '#voice-talent',
     router,
     store,
-    render: h => h(App),
-/*    mounted: function () {
-        this.getAllTalents();
-        this.dragDropImage();
-    },
-    methods: {
-        getAllTalents() {
-            axios.get("/wp-json/vtm/v1/voice-talents/0/10").then(
-            function(response) {
-                if (response.data.error) {
-                    app.errorMsg = response.data.message;
-                }
-                else
-                {
-                    //console.log(response.data.talents);
-                    app.talents = response.data.talents;
-                }
-            });
-        },
-        loadAvatar (event) {
-            var image = document.getElementById('output_avatar');
-            image.src = URL.createObjectURL(event.target.files[0]);
-        },
-        dragDropImage () {
-            let dropArea = document.getElementById('drag-drop-area')
-
-            dropArea.addEventListener('dragenter', handlerFunction, false)
-            dropArea.addEventListener('dragleave', handlerFunction, false)
-            dropArea.addEventListener('dragover', handlerFunction, false)
-            dropArea.addEventListener('drop', handlerFunction, false)
-        }
-    }*/
+    render: h => h(App)
 })

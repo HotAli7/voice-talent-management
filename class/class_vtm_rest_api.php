@@ -32,6 +32,13 @@ class ClassVTMRestAPI
             'methods'  => 'POST',
             'callback' => array( $this, 'delete_voice_talent' )
         ));
+        register_rest_route( 'vtm/v1', 'voice-talent-media(?:/(?P<id>\d+))?',array(
+            'methods'  => 'GET',
+            'callback' => array( $this, 'get_voice_talent_media' ),
+            'args' => [
+                'id'
+            ],
+        ));
         register_rest_route( 'vtm/v1', 'talent-age-group',array(
             'methods'  => 'GET',
             'callback' => array( $this, 'get_age_group_data' )
@@ -297,6 +304,285 @@ class ClassVTMRestAPI
         return $result;
     }
 
+    public function get_voice_talent_media($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+
+        // if no sort, default to talent name
+        $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'talent_name';
+
+        // if no order, default to asc
+        $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
+
+        // voice talent id
+        $id_voice_talent = (!empty($request['id'])) ? $request['id'] : 0;
+        $sql = "SELECT a.id_media, a.id_voice_talent, a.description, b.*, c.*, d.*, e.*, f.*, g.talent_name, h.gender, i.age, j.guid, k.guid as avatar
+					FROM {$db_prefix}lfm_media_files a 
+					left join {$db_prefix}lfm_accents b on a.accent = b.id_accent
+					left join {$db_prefix}lfm_languages c on a.language = c.id_language 
+					left join {$db_prefix}lfm_platforms d on a.platform = d.id_platform
+					left join {$db_prefix}lfm_tones e on a.tone = e.id_tone
+					left join {$db_prefix}lfm_styles f on a.style = f.id_style
+					left join {$db_prefix}lfm_voice_talents g on a.id_voice_talent = g.id_voice_talent
+					left join {$db_prefix}lfm_genders h on g.talent_gender = h.id_gender
+					left join {$db_prefix}lfm_ages i on g.talent_age = i.id_age
+					left join {$db_prefix}posts j on a.id_media = j.ID
+					left join {$db_prefix}posts k on g.image_location = k.ID
+					where a.id_voice_talent = $id_voice_talent
+					order by $orderby $order";
+        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
+
+        $result = array('error'=>false);
+
+        $result['talent_medias'] = $db_data;
+        $response = new WP_REST_Response($result);
+        $response->set_status(200);
+
+        return $response;
+    }
+
+    public function get_media_data($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+
+        // if no sort, default to talent name
+        $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'talent_name';
+
+        // if no order, default to asc
+        $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
+
+        $sql = "SELECT a.id_media, a.id_voice_talent, a.description, b.*, c.*, d.*, e.*, f.*, g.talent_name, h.gender, i.age, j.guid, k.guid as avatar
+					FROM {$db_prefix}lfm_media_files a 
+					left join {$db_prefix}lfm_accents b on a.accent = b.id_accent
+					left join {$db_prefix}lfm_languages c on a.language = c.id_language 
+					left join {$db_prefix}lfm_platforms d on a.platform = d.id_platform
+					left join {$db_prefix}lfm_tones e on a.tone = e.id_tone
+					left join {$db_prefix}lfm_styles f on a.style = f.id_style
+					left join {$db_prefix}lfm_voice_talents g on a.id_voice_talent = g.id_voice_talent
+					left join {$db_prefix}lfm_genders h on g.talent_gender = h.id_gender
+					left join {$db_prefix}lfm_ages i on g.talent_age = i.id_age
+					left join {$db_prefix}posts j on a.id_media = j.ID
+					left join {$db_prefix}posts k on g.image_location = k.ID
+					order by $orderby $order";
+        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
+
+        $result = array('error'=>false);
+
+        $result['medias'] = $db_data;
+        $response = new WP_REST_Response($result);
+        $response->set_status(200);
+
+        return $response;
+    }
+
+    public function insert_media($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+        $tbl_media = $db_prefix . "lfm_media_files";
+        $result = array('error'=>false);
+
+        if(isset($_FILES['media_file'])) {
+            $media_file = $_FILES['media_file'];
+            add_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
+            $uploaded = media_handle_upload('media_file', 0);
+            remove_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
+            // Error checking using WP functions
+            if (is_wp_error($uploaded)) {
+                $result['error'] = true;
+                $result['message'] = "Error uploading file: " . $uploaded->get_error_message();
+            } else {
+                $talent_id = ucwords(strtolower($request['talent_id']));
+                $wpdb->insert(
+                    $tbl_media, //table
+                    array(
+                        'id_voice_talent'   => $talent_id,
+                        'id_media'          => $uploaded,
+                        'accent'            => $request['id_accent'],
+                        'language'          => $request['id_language'],
+                        'platform'          => $request['id_platform'],
+                        'style'             => $request['id_style'],
+                        'tone'              => $request['id_tone'],
+                        'description'       => $request['description']),
+                    array('%s') //data format
+                );
+                $result['message'] = "Voice talent media file added";
+            }
+        } else {
+            $result['message'] = "Can't find Media file";
+            $result['error'] = true;
+        }
+    }
+
+    public function update_media($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+        $tbl_media = $db_prefix . "lfm_media_files";
+        $result = array('error'=>false);
+
+        if(isset($_FILES['media_file'])) {
+            $media_file = $_FILES['media_file'];
+            add_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
+            $uploaded = media_handle_upload('media_file', 0);
+            remove_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
+            // Error checking using WP functions
+            if (is_wp_error($uploaded)) {
+                $result['error'] = true;
+                $result['message'] = "Error uploading file: " . $uploaded->get_error_message();
+            } else {
+                $media_id = $request['id_media'];
+                $talent_id = ucwords(strtolower($request['id_voice_talent']));
+                $wpdb->update(
+                    $tbl_media, //table
+                    array(
+                        'id_voice_talent'   => $talent_id,
+                        'id_media'          => $uploaded,
+                        'accent'            => $request['id_accent'],
+                        'language'          => $request['id_language'],
+                        'platform'          => $request['id_platform'],
+                        'style'             => $request['id_style'],
+                        'tone'              => $request['id_tone'],
+                        'description'       => $request['description']),
+                    array('id_media' => $media_id)
+                );
+
+            }
+        } else {
+            $media_id = $request['id_media'];
+            $talent_id = ucwords(strtolower($request['id_voice_talent']));
+            $wpdb->update(
+                $tbl_media, //table
+                array(
+                    'id_voice_talent'   => $talent_id,
+                    'accent'            => $request['id_accent'],
+                    'language'          => $request['id_language'],
+                    'platform'          => $request['id_platform'],
+                    'style'             => $request['id_style'],
+                    'tone'              => $request['id_tone'],
+                    'description'       => $request['description']),
+                array('id_media' => $media_id)
+            );
+        }
+        $result['message'] = "Voice talent media file edited";
+        $response = new WP_REST_Response($result);
+        $response->set_status(200);
+
+        return $response;
+    }
+
+    public function delete_media($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+        $tbl_media = $db_prefix . "lfm_media_files";
+        $result = array('error'=>false);
+
+        $media_id = $request["id_media"];
+        $wpdb->delete(
+            $tbl_media,
+            array("id_media" => $media_id)
+        );
+        wp_delete_attachment($media_id, true);
+        $result['message'] = "Voice talent media file deleted";
+        return $result;
+    }
+
+    public function get_accent_data($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+
+        // if no sort, default to accent
+        $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'accent';
+
+        // if no order, default to asc
+        $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
+
+        $sql = "select * from {$db_prefix}lfm_accents order by $orderby $order";
+        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
+
+        $result = array('error'=>false);
+
+        $result['accents'] = $db_data;
+        $response = new WP_REST_Response($result);
+        $response->set_status(200);
+
+        return $response;
+    }
+
+    public function insert_accent($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+        $tbl_accent = $db_prefix . "lfm_accents";
+        $result = array('error'=>false);
+
+        $accent = ucwords(strtolower($request['accent']));
+        // check if already exists
+        $sql = "select accent from $tbl_accent where accent = '$accent'";
+        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
+
+        if (count($db_data) == 0) {
+            $wpdb->insert(
+                $tbl_accent, //table
+                array('accent' => $accent), //data
+                array('%s') //data format
+            );
+            $result['message'] = "Accent added";
+        } else {
+            $result['error'] = true;
+            $result['message'] = "Accent already exists";
+        }
+        return $result;
+    }
+
+    public function update_accent($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+        $tbl_accent = $db_prefix . "lfm_accents";
+        $result = array('error'=>false);
+
+        $accent_id = $request["id_accent"];
+
+        $accent = ucwords(strtolower($request['accent']));
+        // check if already exists
+        $sql = "select accent from $tbl_accent where accent = '$accent'";
+        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
+
+        if (count($db_data) == 0) {
+            $wpdb->update(
+                $tbl_accent, //table
+                array('accent' => $accent), //data
+                array('id_accent' => $accent_id)
+            );
+            $result['message'] = "Accent updated";
+        } else {
+            $result['error'] = true;
+            $result['message'] = "Accent already exists";
+        }
+        return $result;
+    }
+
+    public function delete_accent($request) {
+        global $wpdb;
+        $db_prefix = $wpdb->prefix;
+        $tbl_accent = $db_prefix . "lfm_accents";
+        $tbl_media = $db_prefix . "lfm_media_files";
+        $result = array('error'=>false);
+
+        $accent_id = $request["id_accent"];
+        // check if any media is associated with this accent_id
+        $sql = "select count(id_media) as total from $tbl_media where accent = $accent_id";
+        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
+        if ($db_data[0]['total'] == 0) {
+            $wpdb->delete(
+                $tbl_accent,
+                array("id_accent" => $accent_id)
+            );
+            $result['message'] = "Accent deleted";
+        } else {
+            $result['message'] = "Not possible to delete as there are media files associated with this accent";
+            $result['error'] = true;
+        }
+        return $result;
+    }
+
     public function get_age_group_data($request) {
         global $wpdb;
 
@@ -484,150 +770,6 @@ class ClassVTMRestAPI
             $result['message'] = "Not possible to delete as there are media files associated with this language";
             $result['error'] = true;
         }
-        return $result;
-    }
-
-    public function get_media_data($request) {
-        global $wpdb;
-        $db_prefix = $wpdb->prefix;
-
-        // if no sort, default to talent name
-        $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'talent_name';
-
-        // if no order, default to asc
-        $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
-
-        $sql = "SELECT a.id_media, a.id_voice_talent, a.description, b.*, c.*, d.*, e.*, f.*, g.talent_name, h.gender, i.age, j.guid, k.guid as avatar
-					FROM {$db_prefix}lfm_media_files a 
-					left join {$db_prefix}lfm_accents b on a.accent = b.id_accent
-					left join {$db_prefix}lfm_languages c on a.language = c.id_language 
-					left join {$db_prefix}lfm_platforms d on a.platform = d.id_platform
-					left join {$db_prefix}lfm_tones e on a.tone = e.id_tone
-					left join {$db_prefix}lfm_styles f on a.style = f.id_style
-					left join {$db_prefix}lfm_voice_talents g on a.id_voice_talent = g.id_voice_talent
-					left join {$db_prefix}lfm_genders h on g.talent_gender = h.id_gender
-					left join {$db_prefix}lfm_ages i on g.talent_age = i.id_age
-					left join {$db_prefix}posts j on a.id_media = j.ID
-					left join {$db_prefix}posts k on g.image_location = k.ID
-					order by $orderby $order";
-        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
-
-        $result = array('error'=>false);
-
-        $result['medias'] = $db_data;
-        $response = new WP_REST_Response($result);
-        $response->set_status(200);
-
-        return $response;
-    }
-
-    public function insert_media($request) {
-        global $wpdb;
-        $db_prefix = $wpdb->prefix;
-        $tbl_media = $db_prefix . "lfm_media_files";
-        $result = array('error'=>false);
-
-        if(isset($_FILES['media_file'])) {
-            $media_file = $_FILES['media_file'];
-            add_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
-            $uploaded = media_handle_upload('media_file', 0);
-            remove_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
-            // Error checking using WP functions
-            if (is_wp_error($uploaded)) {
-                $result['error'] = true;
-                $result['message'] = "Error uploading file: " . $uploaded->get_error_message();
-            } else {
-                $talent_id = ucwords(strtolower($request['talent_id']));
-                $wpdb->insert(
-                    $tbl_media, //table
-                    array(
-                        'id_voice_talent'   => $talent_id,
-                        'id_media'          => $uploaded,
-                        'accent'            => $request['id_accent'],
-                        'language'          => $request['id_language'],
-                        'platform'          => $request['id_platform'],
-                        'style'             => $request['id_style'],
-                        'tone'              => $request['id_tone'],
-                        'description'       => $request['description']),
-                    array('%s') //data format
-                );
-                $result['message'] = "Voice talent media file added";
-            }
-        } else {
-            $result['message'] = "Can't find Media file";
-            $result['error'] = true;
-        }
-    }
-
-    public function update_media($request) {
-        global $wpdb;
-        $db_prefix = $wpdb->prefix;
-        $tbl_media = $db_prefix . "lfm_media_files";
-        $result = array('error'=>false);
-
-        if(isset($_FILES['media_file'])) {
-            $media_file = $_FILES['media_file'];
-            add_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
-            $uploaded = media_handle_upload('media_file', 0);
-            remove_filter('upload_dir', array($this, 'find_a_voice_media_dir'));
-            // Error checking using WP functions
-            if (is_wp_error($uploaded)) {
-                $result['error'] = true;
-                $result['message'] = "Error uploading file: " . $uploaded->get_error_message();
-            } else {
-                $media_id = $request['id_media'];
-                $talent_id = ucwords(strtolower($request['id_voice_talent']));
-                $wpdb->update(
-                    $tbl_media, //table
-                    array(
-                        'id_voice_talent'   => $talent_id,
-                        'id_media'          => $uploaded,
-                        'accent'            => $request['id_accent'],
-                        'language'          => $request['id_language'],
-                        'platform'          => $request['id_platform'],
-                        'style'             => $request['id_style'],
-                        'tone'              => $request['id_tone'],
-                        'description'       => $request['description']),
-                    array('id_media' => $media_id)
-                );
-
-            }
-        } else {
-            $media_id = $request['id_media'];
-            $talent_id = ucwords(strtolower($request['id_voice_talent']));
-            $wpdb->update(
-                $tbl_media, //table
-                array(
-                    'id_voice_talent'   => $talent_id,
-                    'accent'            => $request['id_accent'],
-                    'language'          => $request['id_language'],
-                    'platform'          => $request['id_platform'],
-                    'style'             => $request['id_style'],
-                    'tone'              => $request['id_tone'],
-                    'description'       => $request['description']),
-                array('id_media' => $media_id)
-            );
-        }
-        $result['message'] = "Voice talent media file edited";
-        $response = new WP_REST_Response($result);
-        $response->set_status(200);
-
-        return $response;
-    }
-
-    public function delete_media($request) {
-        global $wpdb;
-        $db_prefix = $wpdb->prefix;
-        $tbl_media = $db_prefix . "lfm_media_files";
-        $result = array('error'=>false);
-
-        $media_id = $request["id_media"];
-        $wpdb->delete(
-            $tbl_media,
-            array("id_media" => $media_id)
-        );
-        wp_delete_attachment($media_id, true);
-        $result['message'] = "Voice talent media file deleted";
         return $result;
     }
 
@@ -919,104 +1061,6 @@ class ClassVTMRestAPI
             $result['message'] = "Tone deleted";
         } else {
             $result['message'] = "Not possible to delete as there are media files associated with this tone";
-            $result['error'] = true;
-        }
-        return $result;
-    }
-
-    public function get_accent_data($request) {
-        global $wpdb;
-        $db_prefix = $wpdb->prefix;
-
-        // if no sort, default to accent
-        $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'accent';
-
-        // if no order, default to asc
-        $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
-
-        $sql = "select * from {$db_prefix}lfm_accents order by $orderby $order";
-        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
-
-        $result = array('error'=>false);
-
-        $result['accents'] = $db_data;
-        $response = new WP_REST_Response($result);
-        $response->set_status(200);
-
-        return $response;
-    }
-
-    public function insert_accent($request) {
-        global $wpdb;
-        $db_prefix = $wpdb->prefix;
-        $tbl_accent = $db_prefix . "lfm_accents";
-        $result = array('error'=>false);
-
-        $accent = ucwords(strtolower($request['accent']));
-        // check if already exists
-        $sql = "select accent from $tbl_accent where accent = '$accent'";
-        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
-
-        if (count($db_data) == 0) {
-            $wpdb->insert(
-                $tbl_accent, //table
-                array('accent' => $accent), //data
-                array('%s') //data format
-            );
-            $result['message'] = "Accent added";
-        } else {
-            $result['error'] = true;
-            $result['message'] = "Accent already exists";
-        }
-        return $result;
-    }
-
-    public function update_accent($request) {
-        global $wpdb;
-        $db_prefix = $wpdb->prefix;
-        $tbl_accent = $db_prefix . "lfm_accents";
-        $result = array('error'=>false);
-
-        $accent_id = $request["id_accent"];
-
-        $accent = ucwords(strtolower($request['accent']));
-        // check if already exists
-        $sql = "select accent from $tbl_accent where accent = '$accent'";
-        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
-
-        if (count($db_data) == 0) {
-            $wpdb->update(
-                $tbl_accent, //table
-                array('accent' => $accent), //data
-                array('id_accent' => $accent_id)
-            );
-            $result['message'] = "Accent updated";
-        } else {
-            $result['error'] = true;
-            $result['message'] = "Accent already exists";
-        }
-        return $result;
-    }
-
-    public function delete_accent($request) {
-        global $wpdb;
-        $db_prefix = $wpdb->prefix;
-        $tbl_accent = $db_prefix . "lfm_accents";
-        $tbl_media = $db_prefix . "lfm_media_files";
-        $result = array('error'=>false);
-
-        $accent_id = $request["id_accent"];
-        // check if any media is associated with this accent_id
-        $sql = "select count(id_media) as total from $tbl_media where accent = $accent_id";
-        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
-        if ($db_data[0]['total'] == 0) {
-            $wpdb->delete(
-                $tbl_accent,
-                array("id_accent" => $accent_id)
-            );
-            $result['message'] = "Accent deleted";
-        } else {
-            $result['message'] = "Not possible to delete as there are media files associated with this accent";
             $result['error'] = true;
         }
         return $result;

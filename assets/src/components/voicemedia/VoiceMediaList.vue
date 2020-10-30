@@ -3,7 +3,7 @@
         <div class="flex justify-between mb-6 px-6 container">
             <h3 class="text-blue-600 text-xl font-bold py-2 px-4 m-2 w-2/5">Uploaded Talent Voice</h3>
             <div class="sm:ml-6 flex items-end w-3/5 py-2 px-4 m-2">
-                <input data-v-57d7188b="" aria-label="Search" name="key" type="text" required="required" placeholder="Search" class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 w-3/5" :value="key" @change="updateSearchKey($event)">
+                <input data-v-57d7188b="" aria-label="Search" name="key" type="text" required="required" placeholder="Search" class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 w-3/5" :value="key" @input="updateSearchKey($event)">
                 <button class="transition duration-500 ease-in-out bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded w-2/5 ml-6" @click="updateModalVisibility('showAddModal', true)">
                     <i class="fa fa-music"></i><span class="ml-2 uppercase">add new media</span>
                 </button>
@@ -38,18 +38,18 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap">
-                                        <div class="text-sm leading-5 text-gray-500"><a :href="media.guid" target="_blank">{{media.platform}}</a></div>
+                                        <div class="text-sm leading-5 text-gray-900"><a :href="media.guid" target="_blank" class="hover:text-blue-500 transition-all duration-300 cursor-pointer">{{media.platform}}</a></div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{media.accent}}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{media.language}}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{media.style}}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{media.tone}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">

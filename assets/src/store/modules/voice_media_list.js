@@ -64,7 +64,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -83,7 +83,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -102,7 +102,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -121,7 +121,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -140,7 +140,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -159,7 +159,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -178,7 +178,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -193,7 +193,23 @@ const actions = {
     },
     insertMedia({ commit, state, dispatch }) {
 
+        let message = "";
+        if (state.newMedia.media_file == "" || typeof state.newMedia.media_file == "undefined")
+            message = "You must upload Media File! \n\r"
+        if (state.newMedia.id_accent == "" || typeof state.newMedia.id_accent == "undefined")
+            message += "You must select Accent! \n\r"
+        if (state.newMedia.id_platform == "" || typeof state.newMedia.id_platform == "undefined")
+            message += "You must select Platform! \n\r"
+        if (state.newMedia.id_language == "" || typeof state.newMedia.id_language == "undefined")
+            message += "You must select Language! \n\r"
+        if (message != "")
+        {
+            commit('setError', message)
+            return;
+        }
+
         let params = _.cloneDeep(state.newMedia)
+
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -208,7 +224,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -217,6 +233,7 @@ const actions = {
                             modalValue: false,
                         }
                         commit('setModalVisibility', v)
+                        commit('setSuccess', response.data.message);
                         dispatch('fetchData')
                     }
                 })
@@ -227,6 +244,21 @@ const actions = {
             })
     },
     updateMedia({ commit, state, dispatch }) {
+
+        let message = "";
+        if (state.newMedia.media_file == "" || typeof state.newMedia.media_file == "undefined")
+            message = "You must upload Media File! \n\r"
+        if (state.newMedia.id_accent == "" || typeof state.newMedia.id_accent == "undefined")
+            message += "You must select Accent! \n\r"
+        if (state.newMedia.id_platform == "" || typeof state.newMedia.id_platform == "undefined")
+            message += "You must select Platform! \n\r"
+        if (state.newMedia.id_language == "" || typeof state.newMedia.id_language == "undefined")
+            message += "You must select Language! \n\r"
+        if (message != "")
+        {
+            commit('setError', message)
+            return;
+        }
 
         let params = _.cloneDeep(state.newMedia)
         const config = {
@@ -243,7 +275,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -252,6 +284,7 @@ const actions = {
                             modalValue: false,
                         }
                         commit('setModalVisibility', v)
+                        commit('setSuccess', response.data.message);
                         dispatch('fetchData')
                     }
                 })
@@ -278,7 +311,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setError', response.data.message)
                     }
                     else
                     {
@@ -287,6 +320,7 @@ const actions = {
                             modalValue: false,
                         }
                         commit('setModalVisibility', v)
+                        commit('setSuccess', response.data.message);
                         dispatch('fetchData')
                     }
                 })
@@ -412,11 +446,20 @@ const mutations = {
             if (state.key != "")
             {
                 state.medias = state.mediaAll.filter(media => {
-                    return media.platform.toLowerCase().includes(state.key.toLowerCase());
+                    if (media.talent_name != null)
+                        return media.talent_name.toLowerCase().includes(state.key.toLowerCase())
+                    else
+                        return false
                 });
                 state.currentPage = 0
             }
         }
+    },
+    setSuccess(state, value) {
+        state.successMsg = value
+    },
+    setError(state, value) {
+        state.errorMsg = value
     },
     resetState(state) {
         state = Object.assign(state, initialState())

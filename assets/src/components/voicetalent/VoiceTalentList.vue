@@ -3,7 +3,7 @@
         <div class="flex justify-between mb-6 px-6 container">
             <h3 class="text-blue-600 text-xl font-bold py-2 px-4 m-2 w-2/5">Registered Talents</h3>
             <div class="sm:ml-6 flex items-end w-3/5 py-2 px-4 m-2">
-                <input data-v-57d7188b="" aria-label="Search" name="key" type="text" required="required" placeholder="Search" class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 w-3/5" :value="key" @change="updateSearchKey($event)">
+                <input data-v-57d7188b="" aria-label="Search" name="key" type="text" required="required" placeholder="Search" class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 w-3/5" :value="key" @input="updateSearchKey($event)">
                 <button class="transition duration-500 ease-in-out bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded w-2/5 ml-6" @click="updateModalVisibility('showAddModal', true)">
                     <i class="fa fa-user"></i><span class="ml-2 uppercase">add new talent</span>
                 </button>
@@ -31,16 +31,19 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{talent.gender}}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{talent.age}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap">
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                       {{talent.status}}
                                                     </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                                        <a @click="selectTalentMedia({ value1: talent, value2: 'showMediaListModal' })" class="hover:text-blue-500 transition-all duration-300 cursor-pointer">View Media</a>
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                         <button @click="selectTalent({ value1: talent, value2: 'showEditModal' })" class="pr-4 text-indigo-600 hover:text-indigo-900 focus:outline-none"><i class="fa fa-edit pr-2"></i>Edit</button>
@@ -59,6 +62,7 @@
         <AddTalentModal />
         <EditTalentModal />
         <DeleteTalentModal />
+        <MediaListModal />
     </div>
 </template>
 
@@ -71,6 +75,7 @@
     import AddTalentModal from "../modal/AddTalent";
     import EditTalentModal from "../modal/EditTalent";
     import DeleteTalentModal from "../modal/DeleteTalent";
+    import MediaListModal from "../modal/MediaListModal";
 
     export default {
         name: "VoiceTalent",
@@ -80,7 +85,8 @@
             Alert,
             AddTalentModal,
             EditTalentModal,
-            DeleteTalentModal
+            DeleteTalentModal,
+            MediaListModal
         },
         data() {
             return {
@@ -96,7 +102,7 @@
             ...mapGetters('VoiceTalentList', ['data', 'total', 'errorMsg', 'successMsg', 'currentPage', 'pageSize', 'key']),
         },
         methods: {
-            ...mapActions('VoiceTalentList', ['fetchData', 'resetState', 'setModalVisibility', 'selectTalent', 'setSearchKey']),
+            ...mapActions('VoiceTalentList', ['fetchData', 'resetState', 'setModalVisibility', 'selectTalent', 'selectTalentMedia', 'setSearchKey']),
             updateModalVisibility(modalName, modalValue) {
                 let v = {
                         modalName: modalName,

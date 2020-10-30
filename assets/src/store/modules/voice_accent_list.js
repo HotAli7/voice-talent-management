@@ -36,7 +36,6 @@ const actions = {
                     else
                     {
                         commit('setAccentData', response.data.accents);
-                        commit('setSuccessMessage', response.data.message);
                     }
                 })
             .catch(error => {
@@ -61,7 +60,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setErrorMessage', response.data.message)
                     }
                     else
                     {
@@ -71,11 +70,12 @@ const actions = {
                         }
                         commit('setModalVisibility', v)
                         dispatch('fetchAccentData')
+                        commit('setSuccessMessage', response.data.message)
                     }
                 })
             .catch(error => {
-                let message = error.response.data.message || error.message
-                commit('setError', message)
+                let message = error.data.message || error.message
+                commit('setErrorMessage', message)
                 console.log(message)
             })
     },
@@ -110,7 +110,7 @@ const actions = {
             .catch(error => {
                 console.log(error)
                 let message = error.data.message || error.message
-                commit('setError', message)
+                commit('setErrorMessage', message)
                 console.log(message)
             })
     },
@@ -130,7 +130,7 @@ const actions = {
             .then(
                 function(response) {
                     if (response.data.error) {
-                        app.errorMsg = response.data.message;
+                        commit('setErrorMessage', response.data.message)
                     }
                     else
                     {
@@ -140,12 +140,16 @@ const actions = {
                         }
                         commit('setModalVisibility', v)
                         dispatch('fetchAccentData')
+                        commit('setSuccessMessage', response.data.message)
                     }
                 })
             .catch(error => {
-                let message = error.data.message || error.message
-                commit('setError', message)
-                console.log(message)
+                console.log(error)
+                // let message = error.data.message || error.message
+                // commit('setErrorMessage', message)
+                // console.log(message)
+
+                return Promise.reject(error) // this is the important part
             })
     },
     selectAccent({ commit }, { value1, value2 }) {
