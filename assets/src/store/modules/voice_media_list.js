@@ -196,6 +196,8 @@ const actions = {
         let message = "";
         if (state.newMedia.media_file == "" || typeof state.newMedia.media_file == "undefined")
             message = "You must upload Media File! \n\r"
+        if (state.newMedia.id_voice_talent == "" || typeof state.newMedia.id_voice_talent == "undefined")
+            message += "You must select Voice Talent! \n\r"
         if (state.newMedia.id_accent == "" || typeof state.newMedia.id_accent == "undefined")
             message += "You must select Accent! \n\r"
         if (state.newMedia.id_platform == "" || typeof state.newMedia.id_platform == "undefined")
@@ -248,6 +250,8 @@ const actions = {
         let message = "";
         if (state.newMedia.media_file == "" || typeof state.newMedia.media_file == "undefined")
             message = "You must upload Media File! \n\r"
+        if (state.newMedia.id_voice_talent == "" || typeof state.newMedia.id_voice_talent == "undefined")
+            message += "You must select Voice Talent! \n\r"
         if (state.newMedia.id_accent == "" || typeof state.newMedia.id_accent == "undefined")
             message += "You must select Accent! \n\r"
         if (state.newMedia.id_platform == "" || typeof state.newMedia.id_platform == "undefined")
@@ -443,16 +447,13 @@ const mutations = {
 
         if (state.mediaAll.length != 0)
         {
-            if (state.key != "")
-            {
-                state.medias = state.mediaAll.filter(media => {
-                    if (media.talent_name != null)
-                        return media.talent_name.toLowerCase().includes(state.key.toLowerCase())
-                    else
-                        return false
-                });
-                state.currentPage = 0
-            }
+            state.medias = state.mediaAll.filter(media => {
+                if (media.talent_name != null)
+                    return media.talent_name.toLowerCase().includes(state.key.toLowerCase())
+                else
+                    return false
+            });
+            state.currentPage = 0
         }
     },
     setSuccess(state, value) {

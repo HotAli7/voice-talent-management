@@ -117,8 +117,10 @@ const actions = {
     insertTalent({ commit, state, dispatch }) {
 
         let message = "";
-        if (state.newTalent.avatar == "" || typeof state.newTalent.avatar == "undefined")
+        if (state.newTalent.avatar == "" || typeof state.newTalent.avatar == "undefined" || state.newTalent.avatar == null)
             message = "You must upload Avatar! \n\r"
+        if (state.newTalent.name == "" || typeof state.newTalent.name == "undefined")
+            message += "You must type Name of Voice Talent! \n\r"
         if (state.newTalent.status == "" || typeof state.newTalent.status == "undefined")
             message += "You must select Status! \n\r"
         if (state.newTalent.gender == "" || typeof state.newTalent.gender == "undefined")
@@ -168,8 +170,10 @@ const actions = {
     updateTalent({ commit, state, dispatch }) {
 
         let message = "";
-        if (state.newTalent.avatar == "" || typeof state.newTalent.avatar == "undefined")
+        if (state.newTalent.avatar == "" || typeof state.newTalent.avatar == "undefined" || state.newTalent.avatar == null)
             message = "You must upload Avatar! \n\r"
+        if (state.newTalent.name == "" || typeof state.newTalent.name == "undefined")
+            message += "You must type Name of Voice Talent! \n\r"
         if (state.newTalent.status == "" || typeof state.newTalent.status == "undefined")
             message += "You must select Status! \n\r"
         if (state.newTalent.gender == "" || typeof state.newTalent.gender == "undefined")
@@ -370,13 +374,10 @@ const mutations = {
 
         if (state.talentAll.length != 0)
         {
-            if (state.key != "")
-            {
-                state.talents = state.talentAll.filter(talent => {
-                    return talent.talent_name.toLowerCase().includes(state.key.toLowerCase());
-                });
-                state.currentPage = 0
-            }
+            state.talents = state.talentAll.filter(talent => {
+                return talent.talent_name.toLowerCase().includes(state.key.toLowerCase());
+            });
+            state.currentPage = 0
         }
     },
     setSuccess(state, value) {
