@@ -1,5 +1,5 @@
 <template>
-    <div id="drag-drop-area" class="fixed z-10 inset-0 overflow-y-auto" v-if="showEditModal">
+    <div id="drag-drop-area" class="fixed z-10 inset-0 overflow-y-auto" v-if="showEditModal" @dragover="dragover" @dragleave="dragleave" @drop="drop">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity">
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -18,7 +18,10 @@
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                             <div class="mt-2">
                                 <div class="mt-4">
-                                    <input aria-label="Media File" name="media_file" type="file" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Media File" @change="updateMediaFile($event)" >
+                                    <input aria-label="Name" name="name" type="file" required class="h-0 overflow-hidden" ref="file" placeholder="Name" @change="updateMediaFile($event)" >
+                                    <li class="flex justify-between text-sm p-1" v-for="file in filelist">
+                                        {{file.name}} <button type="button" @click="removeMedia(filelist.indexOf(file))" title="Remove file">Remove File</button>
+                                    </li>
                                 </div>
                                 <div class="mt-4">
                                     <VoiceTalentSelect />
@@ -87,7 +90,7 @@
 
         data() {
             return {
-
+                filelist: [] // Store our uploaded files
             }
         },
         created() {
@@ -111,9 +114,6 @@
                 }
                 this.setModalVisibility(v)
             },
-            updateMediaFile(event) {
-                this.setMedia(event.target.files[0])
-            },
             updateAccent(event) {
                 this.setAccent(event.target.value)
             },
@@ -128,6 +128,33 @@
             },
             updateTone(event) {
                 this.setTone(event.target.value)
+            },
+            updateMediaFile() {
+                this.filelist = [...this.$refs.file.files];
+                this.setMedia(this.filelist[0])
+                console.log(this.filelist[0])
+            },
+            removeMedia(i) {
+                this.filelist.splice(i, 1);
+                this.unsetMedia()
+            },
+            dragover(event) {
+                event.preventDefault();
+                // Add some visual fluff to show the user can drop its files
+                if (!event.currentTarget.classList.contains('bg-green-300')) {
+                    event.currentTarget.classList.add('bg-green-300');
+                }
+            },
+            dragleave(event) {
+                // Clean up
+                event.currentTarget.classList.remove('bg-green-300');
+            },
+            drop(event) {
+                event.preventDefault();
+                this.$refs.file.files = event.dataTransfer.files;
+                this.updateMediaFile(); // Trigger the onChange event manually
+                // Clean up
+                event.currentTarget.classList.remove('bg-green-300');
             }
         }
     }

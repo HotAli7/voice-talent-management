@@ -351,6 +351,9 @@ const actions = {
     setMedia({ commit }, value) {
         commit('setMedia', value)
     },
+    unsetMedia({ commit }) {
+        commit('unsetMedia')
+    },
     setTalent({ commit }, value) {
         commit('setTalent', value)
     },
@@ -414,6 +417,9 @@ const mutations = {
     },
     setMedia(state, value) {
         state.newMedia.media_file = value
+    },
+    unsetMedia(state) {
+        state.newMedia.media_file = null
     },
     setTalent(state, value) {
         state.newMedia.talent_id = value.id_voice_talent

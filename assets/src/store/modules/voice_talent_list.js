@@ -2,6 +2,7 @@ function initialState() {
     return {
         talents: [],
         talentAll: [],
+        searchedTalentAll: [],
         talent_medias: [],
         ageGroup: [],
         newTalent: {
@@ -25,10 +26,15 @@ function initialState() {
             { id: "4", name: "Female" },
         ],
         status: [
-            { id: "P", name: "Pending / Pause" },
-            { id: "L", name: "Live" },
-            { id: "D", name: "Dead" },
+            { id: "P", name: "Paused" },
+            { id: "V", name: "Vacation" },
+            { id: "L", name: "Active" },
         ],
+        statusText: {
+            "P": "Paused",
+            "V": "Vacation",
+            "L": "Active",
+        },
         errorMsg: false,
         successMsg: false,
         showAddModal: false,
@@ -54,6 +60,7 @@ const getters = {
         return rows
     },
     talentAll: state => state.talents,
+    searchedTalentAll:  state => state.coupons,
     talent_medias: state => state.talent_medias,
     ageGroup: state => {
         let ageGroupData = state.ageGroup
@@ -63,6 +70,7 @@ const getters = {
     newTalent:          state => state.newTalent,
     gender:             state => state.gender,
     status:             state => state.status,
+    statusText:         state => state.statusText,
     total:              state => state.talents.length,
     errorMsg:           state => state.errorMsg,
     successMsg:         state => state.successMsg,
@@ -314,6 +322,9 @@ const actions = {
     setSearchKey({ commit }, value) {
         commit('setSearchKey', value)
     },
+    setStatusFilter({ commit }, value) {
+        commit('setStatusFilter', value)
+    },
     resetState({ commit }) {
         commit('resetState')
     }
@@ -323,6 +334,7 @@ const mutations = {
     setAll(state, items) {
         state.talents = items
         state.talentAll = items
+        state.searchedTalentAll = items
     },
     setTalentMedia(state, item) {
         state.talent_medias = item
@@ -374,11 +386,18 @@ const mutations = {
 
         if (state.talentAll.length != 0)
         {
-            state.talents = state.talentAll.filter(talent => {
+            state.talents = state.searchedTalentAll = state.talentAll.filter(talent => {
                 return talent.talent_name.toLowerCase().includes(state.key.toLowerCase());
             });
             state.currentPage = 0
         }
+    },
+    setStatusFilter(state, value) {
+        state.talents = state.searchedTalentAll.filter(talent => {
+            if (value == "")
+                return true;
+            return talent.status == value;
+        });
     },
     setSuccess(state, value) {
         state.successMsg = value
