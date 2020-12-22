@@ -126,15 +126,15 @@ const actions = {
 
         let message = "";
         if (state.newTalent.avatar == "" || typeof state.newTalent.avatar == "undefined" || state.newTalent.avatar == null)
-            message = "You must upload Avatar! \n\r"
+            message = "You must upload Avatar! <br />"
         if (state.newTalent.name == "" || typeof state.newTalent.name == "undefined")
-            message += "You must type Name of Voice Talent! \n\r"
+            message += "You must type Name of Voice Talent! <br />"
         if (state.newTalent.status == "" || typeof state.newTalent.status == "undefined")
-            message += "You must select Status! \n\r"
+            message += "You must select Status! <br />"
         if (state.newTalent.gender == "" || typeof state.newTalent.gender == "undefined")
-            message += "You must select Gender! \n\r"
+            message += "You must select Gender! <br />"
         if (state.newTalent.age == "" || typeof state.newTalent.age == "undefined")
-            message += "You must select Age Group! \n\r"
+            message += "You must select Age Group! <br />"
         if (message != "")
         {
             commit('setError', message)
@@ -178,16 +178,14 @@ const actions = {
     updateTalent({ commit, state, dispatch }) {
 
         let message = "";
-        if (state.newTalent.avatar == "" || typeof state.newTalent.avatar == "undefined" || state.newTalent.avatar == null)
-            message = "You must upload Avatar! \n\r"
         if (state.newTalent.name == "" || typeof state.newTalent.name == "undefined")
-            message += "You must type Name of Voice Talent! \n\r"
+            message += "You must type Name of Voice Talent! <br />"
         if (state.newTalent.status == "" || typeof state.newTalent.status == "undefined")
-            message += "You must select Status! \n\r"
+            message += "You must select Status! <br />"
         if (state.newTalent.gender == "" || typeof state.newTalent.gender == "undefined")
-            message += "You must select Gender! \n\r"
+            message += "You must select Gender! <br />"
         if (state.newTalent.age == "" || typeof state.newTalent.age == "undefined")
-            message += "You must select Age Group! \n\r"
+            message += "You must select Age Group! <br />"
         if (message != "")
         {
             commit('setError', message)
@@ -268,12 +266,12 @@ const actions = {
         commit('setModalVisibility', value)
     },
     selectTalent({ commit }, { value1, value2 }) {
-        commit('selectTalent', value1)
         let v = {
             modalName: value2,
             modalValue: true,
         }
         commit('setModalVisibility', v)
+        commit('selectTalent', value1)
     },
     selectTalentMedia({ commit }, { value1, value2 }) {
 
@@ -358,6 +356,8 @@ const mutations = {
         state.newTalent.avatar      = value1['guid']
     },
     setModalVisibility(state, value) {
+        state.currentTalent = []
+        state.newTalent = []
         let modalName = value['modalName']
         let modalValue = value['modalValue']
 

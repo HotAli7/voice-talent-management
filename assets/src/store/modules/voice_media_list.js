@@ -194,16 +194,16 @@ const actions = {
     insertMedia({ commit, state, dispatch }) {
 
         let message = "";
-        if (state.newMedia.media_file == "" || typeof state.newMedia.media_file == "undefined")
-            message = "You must upload Media File! \n\r"
+        if (state.newMedia.media_file == "" || typeof state.newMedia.media_file == "undefined" || !state.newMedia.media_file)
+            message = "You must upload Media File! <br />"
         if (state.newMedia.id_voice_talent == "" || typeof state.newMedia.id_voice_talent == "undefined")
-            message += "You must select Voice Talent! \n\r"
+            message += "You must select Voice Talent! <br />"
         if (state.newMedia.id_accent == "" || typeof state.newMedia.id_accent == "undefined")
-            message += "You must select Accent! \n\r"
+            message += "You must select Accent! <br />"
         if (state.newMedia.id_platform == "" || typeof state.newMedia.id_platform == "undefined")
-            message += "You must select Platform! \n\r"
+            message += "You must select Platform! <br />"
         if (state.newMedia.id_language == "" || typeof state.newMedia.id_language == "undefined")
-            message += "You must select Language! \n\r"
+            message += "You must select Language! <br />"
         if (message != "")
         {
             commit('setError', message)
@@ -248,16 +248,14 @@ const actions = {
     updateMedia({ commit, state, dispatch }) {
 
         let message = "";
-        if (state.newMedia.media_file == "" || typeof state.newMedia.media_file == "undefined")
-            message = "You must upload Media File! \n\r"
         if (state.newMedia.id_voice_talent == "" || typeof state.newMedia.id_voice_talent == "undefined")
-            message += "You must select Voice Talent! \n\r"
+            message += "You must select Voice Talent! <br />"
         if (state.newMedia.id_accent == "" || typeof state.newMedia.id_accent == "undefined")
-            message += "You must select Accent! \n\r"
+            message += "You must select Accent! <br />"
         if (state.newMedia.id_platform == "" || typeof state.newMedia.id_platform == "undefined")
-            message += "You must select Platform! \n\r"
+            message += "You must select Platform! <br />"
         if (state.newMedia.id_language == "" || typeof state.newMedia.id_language == "undefined")
-            message += "You must select Language! \n\r"
+            message += "You must select Language! <br />"
         if (message != "")
         {
             commit('setError', message)
@@ -338,12 +336,12 @@ const actions = {
         commit('setModalVisibility', value)
     },
     selectMedia({ commit }, { value1, value2 }) {
-        commit('selectMedia', value1)
         let v = {
             modalName: value2,
             modalValue: true,
         }
         commit('setModalVisibility', v)
+        commit('selectMedia', value1)
     },
     setSelectedTalent({ commit }, value) {
         commit('setSelectedTalent', value)
@@ -440,6 +438,8 @@ const mutations = {
         state.newMedia.id_tone = value
     },
     setModalVisibility(state, value) {
+        state.currentMedia = []
+        state.newMedia = []
         let modalName = value['modalName']
         let modalValue = value['modalValue']
 
