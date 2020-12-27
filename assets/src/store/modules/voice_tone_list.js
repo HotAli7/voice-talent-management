@@ -46,7 +46,7 @@ const actions = {
             })
     },
     insertTone({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newTone)
+        let params = state.newTone
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -80,7 +80,7 @@ const actions = {
             })
     },
     updateTone({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newTone)
+        let params = state.newTone
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -115,7 +115,7 @@ const actions = {
             })
     },
     deleteTone({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.currentTone)
+        let params = state.currentTone
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }

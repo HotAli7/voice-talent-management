@@ -141,7 +141,7 @@ const actions = {
             return;
         }
 
-        let params = _.cloneDeep(state.newTalent)
+        let params = state.newTalent
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -192,7 +192,7 @@ const actions = {
             return;
         }
 
-        let params = _.cloneDeep(state.newTalent)
+        let params = state.newTalent
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -203,6 +203,7 @@ const actions = {
                 formData.append(key, params[key]);
             }
         });
+
         axios.post("/wp-json/vtm/v1/update-talent", formData, config)
             .then(
                 function(response) {
@@ -228,7 +229,7 @@ const actions = {
     },
     deleteTalent({ commit, state, dispatch }) {
 
-        let params = _.cloneDeep(state.currentTalent)
+        let params = state.currentTalent
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }

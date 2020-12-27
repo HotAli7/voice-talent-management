@@ -210,7 +210,7 @@ const actions = {
             return;
         }
 
-        let params = _.cloneDeep(state.newMedia)
+        let params = state.newMedia
 
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
@@ -262,7 +262,7 @@ const actions = {
             return;
         }
 
-        let params = _.cloneDeep(state.newMedia)
+        let params = state.newMedia
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -298,7 +298,7 @@ const actions = {
     },
     deleteMedia({ commit, state, dispatch }) {
 
-        let params = _.cloneDeep(state.currentMedia)
+        let params = state.currentMedia
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }

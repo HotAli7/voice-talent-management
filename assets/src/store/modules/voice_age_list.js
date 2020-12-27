@@ -46,7 +46,7 @@ const actions = {
             })
     },
     insertAge({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newAge)
+        let params = state.newAge
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -80,7 +80,7 @@ const actions = {
             })
     },
     updateAge({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newAge)
+        let params = state.newAge
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -115,7 +115,7 @@ const actions = {
             })
     },
     deleteAge({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.currentAge)
+        let params = state.currentAge
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }

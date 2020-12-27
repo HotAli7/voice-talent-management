@@ -46,7 +46,7 @@ const actions = {
             })
     },
     insertLanguage({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newLanguage)
+        let params = state.newLanguage
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -80,7 +80,7 @@ const actions = {
             })
     },
     updateLanguage({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newLanguage)
+        let params = state.newLanguage
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -115,7 +115,7 @@ const actions = {
             })
     },
     deleteLanguage({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.currentLanguage)
+        let params = state.currentLanguage
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }

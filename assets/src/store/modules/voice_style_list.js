@@ -46,7 +46,7 @@ const actions = {
             })
     },
     insertStyle({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newStyle)
+        let params = state.newStyle
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -80,7 +80,7 @@ const actions = {
             })
     },
     updateStyle({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newStyle)
+        let params = state.newStyle
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -115,7 +115,7 @@ const actions = {
             })
     },
     deleteStyle({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.currentStyle)
+        let params = state.currentStyle
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }

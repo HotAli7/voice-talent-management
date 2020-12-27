@@ -46,7 +46,7 @@ const actions = {
             })
     },
     insertPlatform({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newPlatform)
+        let params = state.newPlatform
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -80,7 +80,7 @@ const actions = {
             })
     },
     updatePlatform({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newPlatform)
+        let params = state.newPlatform
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -115,7 +115,7 @@ const actions = {
             })
     },
     deletePlatform({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.currentPlatform)
+        let params = state.currentPlatform
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }

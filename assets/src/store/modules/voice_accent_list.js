@@ -45,7 +45,7 @@ const actions = {
             })
     },
     insertAccent({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newAccent)
+        let params = state.newAccent
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -80,7 +80,7 @@ const actions = {
             })
     },
     updateAccent({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.newAccent)
+        let params = state.newAccent
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
@@ -115,7 +115,7 @@ const actions = {
             })
     },
     deleteAccent({ commit, state, dispatch }) {
-        let params = _.cloneDeep(state.currentAccent)
+        let params = state.currentAccent
         const config = {
             headers: { 'Content-Type': 'multipart/form-data' }
         }
