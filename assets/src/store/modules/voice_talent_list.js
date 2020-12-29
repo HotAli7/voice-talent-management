@@ -357,8 +357,11 @@ const mutations = {
         state.newTalent.avatar      = value1['guid']
     },
     setModalVisibility(state, value) {
-        state.currentTalent = []
-        state.newTalent = []
+        if (!value['modalValue'])
+        {
+            state.currentTalent = []
+            state.newTalent = []
+        }
         let modalName = value['modalName']
         let modalValue = value['modalValue']
 

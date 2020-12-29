@@ -7,7 +7,7 @@
 
             <!-- This element is to trick the browser into centering the modal contents. -->
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="bg-blue-100 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <h3 class="text-lg leading-6 font-bold text-blue-700 text-center" id="modal-headline">
                         Media List of {{currentTalent.name}}
@@ -33,8 +33,11 @@
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
                                     <tr v-for="media in talent_medias">
-                                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                                            <a :href="media.guid" target="_blank" class="hover:text-blue-500 transition-all duration-300 cursor-pointer">{{media.platform}}</a>
+                                        <td class="relative px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 text-right">
+                                            <audio controls>
+                                                <source :src="media.guid" type="audio/mpeg">
+                                            </audio>
+                                            <a :href="media.guid" target="_blank" class="absolute top-1 right-2 inline-block hover:text-pink-400 transition-all duration-300 cursor-pointer text-xs font-semibold py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 uppercase last:mr-0 mr-1">{{media.platform}}</a>
                                         </td>
                                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                             {{media.accent}}
@@ -84,6 +87,7 @@
         methods: {
             ...mapActions('VoiceTalentList', ['setModalVisibility']),
             updateModalVisibility(modalName, modalValue) {
+
                 let v = {
                     modalName: modalName,
                     modalValue: modalValue,
