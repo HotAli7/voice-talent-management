@@ -194,9 +194,10 @@ const actions = {
     insertMedia({ commit, state, dispatch }) {
 
         let message = "";
+        console.log(state.newMedia)
         if (state.newMedia.media_file == "" || typeof state.newMedia.media_file == "undefined" || !state.newMedia.media_file)
             message = "You must upload Media File! <br />"
-        if (state.newMedia.id_voice_talent == "" || typeof state.newMedia.id_voice_talent == "undefined")
+        if (state.newMedia.talent_id == "" || typeof state.newMedia.talent_id == "undefined")
             message += "You must select Voice Talent! <br />"
         if (state.newMedia.id_accent == "" || typeof state.newMedia.id_accent == "undefined")
             message += "You must select Accent! <br />"
@@ -248,7 +249,7 @@ const actions = {
     updateMedia({ commit, state, dispatch }) {
 
         let message = "";
-        if (state.newMedia.id_voice_talent == "" || typeof state.newMedia.id_voice_talent == "undefined")
+        if (state.newMedia.talent_id == "" || typeof state.newMedia.talent_id == "undefined")
             message += "You must select Voice Talent! <br />"
         if (state.newMedia.id_accent == "" || typeof state.newMedia.id_accent == "undefined")
             message += "You must select Accent! <br />"
