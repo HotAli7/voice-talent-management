@@ -288,18 +288,19 @@ class ClassVTMRestAPI
         if (isset($request['id']) && ($request['id'] != '')) {
             $talent_id = $request["id"];
             // check if any media is associated with this talentid
-            $sql = "select count(id_media) as total from $tbl_media where id_voice_talent = $talent_id";
+            $sql = "select id_media from $tbl_media where id_voice_talent = $talent_id";
             $db_data = $wpdb->get_results($sql, 'ARRAY_A');
-            if ($db_data[0]['total'] == 0) {
-                $wpdb->delete(
-                    $tbl,
-                    array("id_voice_talent" => $talent_id)
-                );
-                $result['message'] = "Voice talent deleted";
-            } else {
-                $result['message'] = "Not possible to delete as there are media files associated with this voice talent";
-                $result['error'] = true;
-            }
+            $wpdb->delete(
+                $tbl_media,
+                array("id_voice_talent" => $talent_id)
+            );
+            foreach ($db_data as $media)
+                wp_delete_attachment($media['media_id'], true);
+            $wpdb->delete(
+                $tbl,
+                array("id_voice_talent" => $talent_id)
+            );
+            $result['message'] = "Voice talent and related media files are deleted";
         }
         return $result;
     }
@@ -391,7 +392,7 @@ class ClassVTMRestAPI
                 $result['error'] = true;
                 $result['message'] = "Error uploading file: " . $uploaded->get_error_message();
             } else {
-                $talent_id = ucwords(strtolower($request['talent_id']));
+                $talent_id = ucwords(strtolower($request['id_voice_talent']));
                 $wpdb->insert(
                     $tbl_media, //table
                     array(
@@ -411,6 +412,10 @@ class ClassVTMRestAPI
             $result['message'] = "Can't find Media file";
             $result['error'] = true;
         }
+        $response = new WP_REST_Response($result);
+        $response->set_status(200);
+
+        return $response;
     }
 
     public function update_media($request) {

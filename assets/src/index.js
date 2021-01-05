@@ -9,13 +9,16 @@ window.purify = o => JSON.parse(JSON.stringify(o))
 import Vue from 'vue';
 import VueAxios from 'vue-axios';
 import vSelect from 'vue-select';
+import VueNoty from 'vuejs-noty'
 import router from './route'
 import store from './store/store';
 import App from './App';
 
 import './style.css';
+import 'vuejs-noty/dist/vuejs-noty.css'
 
 Vue.use(VueAxios, axios);
+Vue.use(VueNoty);
 
 Vue.component('v-select', vSelect);
 
