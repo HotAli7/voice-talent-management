@@ -2,6 +2,7 @@
 function initialState() {
     return {
         talents: [],
+        talentAll: [],
         medias: [],
         mediaAll:[],
         ageGroup: [],
@@ -39,6 +40,7 @@ const getters = {
     mediaAll:           state => state.mediaAll,
     ageGroup:           state => state.ageGroup,
     talents:            state => state.talents,
+    talentAll:          state => state.talentAll,
     accents:            state => state.accents,
     languages:          state => state.languages,
     platforms:          state => state.platforms,
@@ -377,6 +379,9 @@ const actions = {
     setSearchKey({ commit }, value) {
         commit('setSearchKey', value)
     },
+    selectVoiceTalent({ commit }, value) {
+        commit('selectVoiceTalent', value)
+    },
     resetState({ commit }) {
         commit('resetState')
     }
@@ -389,6 +394,7 @@ const mutations = {
     },
     setTalentData(state, items) {
         state.talents = items
+        state.talentAll = items
         let currentTalentID = state.currentMedia.id_voice_talent
         state.selectedTalent = state.talents.filter( talent => talent.id_voice_talent == currentTalentID)[0]
     },
@@ -461,6 +467,14 @@ const mutations = {
                     return false
             });
             state.currentPage = 0
+        }
+    },
+    selectVoiceTalent(state, value) {
+        if (state.talentAll.length != 0)
+        {
+            state.talents = state.talentAll.filter(talent => {
+                return talent.talent_name.toLowerCase().includes(value.toLowerCase());
+            });
         }
     },
     setSuccess(state, value) {

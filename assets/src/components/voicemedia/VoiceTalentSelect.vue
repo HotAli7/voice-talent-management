@@ -12,13 +12,19 @@
                     <div class="flex items-center space-x-3" v-if="selectedTalent">
                         <img :src="selectedTalent.guid"
                              alt="" class="flex-shrink-0 h-6 w-6 rounded-full" />
-                        <span class="block truncate">
+                        <input type="text" id="voice_talent_name" class="block truncate border-0 w-full focus:outline-none focus:ring focus:border-blue-300"  :placeholder="selectedTalent.talent_name" @input="selectTalent" v-if="isOpen" />
+                        <span class="block truncate" v-else>
                             {{ selectedTalent.talent_name }} - {{selectedTalent.gender}} - {{selectedTalent.age}}
                         </span>
                     </div>
+                    <div class="flex items-center space-x-3" v-else>
+                        <img src=""
+                             alt="" class="flex-shrink-0 h-6 w-6 rounded-full" />
+                        <input type="text" class="block truncate border-0 focus:outline-none focus:ring focus:border-blue-300" @input="selectTalent" />
+                    </div>
                     <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                        <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
                 </button>
@@ -60,7 +66,7 @@
         name: 'VoiceTalentSelect',
         data() {
             return {
-                'isOpen': false
+                'isOpen': false,
             }
         },
         created() {
@@ -70,7 +76,7 @@
             ...mapGetters('VoiceMediaList', ['showAddModal', 'talents', 'currentMedia', 'selectedTalent']),
         },
         methods: {
-            ...mapActions('VoiceMediaList', ['fetchTalentData', 'setTalent', 'setSelectedTalent']),
+            ...mapActions('VoiceMediaList', ['fetchTalentData', 'setTalent', 'setSelectedTalent', 'selectVoiceTalent']),
             isSelected(value) {
                 return this.selectedTalent === value;
             },
@@ -84,6 +90,9 @@
                 this.isOpen = false;
                 this.setSelectedTalent(value)
                 this.setTalent(value)
+            },
+            selectTalent(e) {
+                this.selectVoiceTalent(e.target.value)
             }
         },
         directives: {
