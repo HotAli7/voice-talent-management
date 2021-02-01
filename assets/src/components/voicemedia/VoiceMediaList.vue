@@ -55,6 +55,9 @@
                                     <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                         <button @click="selectMedia({ value1: media, value2: 'showEditModal' })" class="pr-4 text-indigo-600 hover:text-indigo-900 focus:outline-none"><i class="fa fa-edit pr-2"></i>Edit</button>
                                         <button @click="selectMedia({ value1: media, value2: 'showDeleteModal' })" class="text-red-600 hover:text-red-900 focus:outline-none"><i class="fa fa-trash pr-2"></i>Delete</button>
+                                        <div class="text-sm leading-5 text-gray-500">
+                                            {{media.updated_date}}
+                                        </div>
                                     </td>
                                 </tr>
 

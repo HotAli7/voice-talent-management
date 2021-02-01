@@ -52,7 +52,7 @@ const getters = {
         let firstSliceNumber = state.currentPage*state.pageSize
         let lastSliceNumber = (state.currentPage+1)*state.pageSize
         let rows = [];
-        if (state.talents.length != 0)
+        if (state.talents && state.talents.length != 0)
         {
             rows = state.talents.slice(firstSliceNumber, lastSliceNumber)
         }
@@ -71,7 +71,7 @@ const getters = {
     gender:             state => state.gender,
     status:             state => state.status,
     statusText:         state => state.statusText,
-    total:              state => state.talents.length,
+    total:              state => state.talents && state.talents.length,
     errorMsg:           state => state.errorMsg,
     successMsg:         state => state.successMsg,
     showAddModal:       state => state.showAddModal,

@@ -20,6 +20,10 @@ class ClassVTMRestAPI
             'methods'  => 'GET',
             'callback' => array( $this, 'get_voice_talent_list' )
         ));
+        register_rest_route( 'vtm/v1', 'voice-talents-except-paused',array(
+            'methods'  => 'GET',
+            'callback' => array( $this, 'get_voice_talent_except_paused_list' )
+        ));
         register_rest_route( 'vtm/v1', 'insert-talent',array(
             'methods'  => 'POST',
             'callback' => array( $this, 'insert_voice_talent' )
@@ -174,11 +178,41 @@ class ClassVTMRestAPI
         $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
 
         $sql = "select a.id_voice_talent, a.talent_name, a.status, a.talent_gender, a.talent_age, b.gender, c.age, j.guid 
-					from {$db_prefix}lfm_voice_talents a
-					left join {$db_prefix}lfm_genders b on a.talent_gender = b.id_gender
-					left join {$db_prefix}lfm_ages c on a.talent_age = c.id_age
-					left join {$db_prefix}posts j on a.image_location = j.ID
-					order by $orderby $order";
+                    from {$db_prefix}lfm_voice_talents a
+                    left join {$db_prefix}lfm_genders b on a.talent_gender = b.id_gender
+                    left join {$db_prefix}lfm_ages c on a.talent_age = c.id_age
+                    left join {$db_prefix}posts j on a.image_location = j.ID
+                    order by $orderby $order";
+
+        $db_data = $wpdb->get_results($sql, 'ARRAY_A');
+
+        $result = array('error'=>false);
+
+        $result['talents'] = $db_data;
+        $response = new WP_REST_Response($result);
+        $response->set_status(200);
+
+        return $response;
+    }
+
+    public function get_voice_talent_except_paused_list($request) {
+        global $wpdb;
+
+        $db_prefix = $wpdb->prefix;
+
+        // if no sort, default to accent
+        $orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : 'talent_name';
+
+        // if no order, default to asc
+        $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
+
+        $sql = "select a.id_voice_talent, a.talent_name, a.status, a.talent_gender, a.talent_age, b.gender, c.age, j.guid 
+                    from {$db_prefix}lfm_voice_talents a
+                    left join {$db_prefix}lfm_genders b on a.talent_gender = b.id_gender
+                    left join {$db_prefix}lfm_ages c on a.talent_age = c.id_age
+                    left join {$db_prefix}posts j on a.image_location = j.ID
+                    where a.status <> 'P'
+                    order by $orderby $order";
 
         $db_data = $wpdb->get_results($sql, 'ARRAY_A');
 
@@ -352,7 +386,7 @@ class ClassVTMRestAPI
         // if no order, default to asc
         $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
 
-        $sql = "SELECT a.id_media, a.id_voice_talent, a.description, b.*, c.*, d.*, e.*, f.*, g.talent_name, h.gender, i.age, j.guid, k.guid as avatar
+        $sql = "SELECT a.id_media, a.id_voice_talent, a.description, b.*, c.*, d.*, e.*, f.*, g.talent_name, h.gender, i.age, j.guid, k.guid as avatar, j.post_date as updated_date
 					FROM {$db_prefix}lfm_media_files a 
 					left join {$db_prefix}lfm_accents b on a.accent = b.id_accent
 					left join {$db_prefix}lfm_languages c on a.language = c.id_language 

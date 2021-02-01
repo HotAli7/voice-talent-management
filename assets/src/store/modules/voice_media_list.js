@@ -30,7 +30,7 @@ const getters = {
         let firstSliceNumber = state.currentPage*state.pageSize
         let lastSliceNumber = (state.currentPage+1)*state.pageSize
         let rows = []
-        if (state.medias.length != 0)
+        if (state.medias && state.medias.length != 0)
         {
             rows = state.medias.slice(firstSliceNumber, lastSliceNumber)
         }
@@ -49,7 +49,7 @@ const getters = {
     currentMedia:       state => state.currentMedia,
     newMedia:           state => state.newMedia,
     selectedTalent:     state => state.selectedTalent,
-    total:              state => state.medias.length,
+    total:              state => state.medias && state.medias.length,
     errorMsg:           state => state.errorMsg,
     successMsg:         state => state.successMsg,
     showAddModal:       state => state.showAddModal,
@@ -237,7 +237,7 @@ const actions = {
                             modalName: "showAddModal",
                             modalValue: false,
                         }
-                        commit('setModalVisibility', v)
+                        commit('resetSelectedMedia')
                         commit('setSuccess', response.data.message);
                         dispatch('fetchData')
                     }
@@ -486,6 +486,10 @@ const mutations = {
     resetState(state) {
         state = Object.assign(state, initialState())
     },
+    resetSelectedMedia(state) {
+        state.currentMedia = []
+        state.newMedia = []
+    }
 }
 
 export default {
