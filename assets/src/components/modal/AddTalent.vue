@@ -45,6 +45,38 @@
                                         <option :value="s.id" v-for="s in status">{{s.name}}</option>
                                     </select>
                                 </div>
+                                <div class="mt-4">
+                                    <VueTailWindPicker
+                                        :theme="{
+                                                    background: '#1A202C',
+                                                    text: 'text-white',
+                                                    border: 'border-gray-700',
+                                                    currentColor: 'text-gray-200',
+                                                    navigation: {
+                                                        background: 'bg-gray-800',
+                                                        hover: 'hover:bg-gray-700',
+                                                        focus: 'bg-gray-700',
+                                                    },
+                                                    picker: {
+                                                        rounded: 'rounded-md',
+                                                        selected: {
+                                                            background: 'bg-teal-400',
+                                                            border: 'border-teal-400',
+                                                            hover: 'hover:border-teal-400',
+                                                        },
+                                                        holiday: 'text-red-400',
+                                                        weekend: 'text-green-400',
+                                                        event: 'bg-blue-500',
+                                                    },
+                                                    event: {
+                                                        border: 'border-gray-700',
+                                                    },
+                                                }"
+                                        :init="false"
+                                        @change="(v) => { updateVacation(v) }">
+                                        <input v-model="on_vacation_till" class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Example initial value">
+                                    </VueTailWindPicker>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -71,10 +103,12 @@
 
     export default {
         name: "AddTalent",
-
+        components: {
+            VueTailWindPicker: () => import('vue-tailwind-picker')
+        },
         data() {
             return {
-
+                on_vacation_till: null
             }
         },
         created() {
@@ -86,7 +120,7 @@
             ...mapGetters('VoiceTalentList', ['showAddModal', 'ageGroup', 'gender', 'status']),
         },
         methods: {
-            ...mapActions('VoiceTalentList', ['setModalVisibility', 'fetchAgeGroupData', 'insertTalent', 'setAvatar', 'setName', 'setGender', 'setAge', 'setStatus']),
+            ...mapActions('VoiceTalentList', ['setModalVisibility', 'fetchAgeGroupData', 'insertTalent', 'setAvatar', 'setName', 'setGender', 'setAge', 'setStatus', 'setVacation']),
             updateModalVisibility(modalName, modalValue) {
                 let v = {
                     modalName: modalName,
@@ -110,6 +144,10 @@
             },
             updateStatus(event) {
                 this.setStatus(event.target.value)
+            },
+            updateVacation(v) {
+                this.on_vacation_till = v
+                this.setVacation(v)
             }
         }
     }

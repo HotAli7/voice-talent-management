@@ -11,7 +11,8 @@ function initialState() {
             age: "",
             gender: "",
             status: "",
-            avatar: null
+            avatar: null,
+            on_vacation_till: null
         },
         currentTalent: {
             id: "",
@@ -19,7 +20,8 @@ function initialState() {
             age: "",
             gender: "",
             status: "",
-            avatar: null
+            avatar: null,
+            on_vacation_till: null
         },
         gender: [
             { id: "3", name: "Male" },
@@ -135,6 +137,8 @@ const actions = {
             message += "You must select Gender! <br />"
         if (state.newTalent.age == "" || typeof state.newTalent.age == "undefined")
             message += "You must select Age Group! <br />"
+        if (state.newTalent.on_vacation_till !== "" && state.newTalent.on_vacation_till !== "0000-00-00")
+            commit('setStatus', 'P')
         if (message != "")
         {
             commit('setError', message)
@@ -186,6 +190,9 @@ const actions = {
             message += "You must select Gender! <br />"
         if (state.newTalent.age == "" || typeof state.newTalent.age == "undefined")
             message += "You must select Age Group! <br />"
+        if (state.newTalent.on_vacation_till !== "" && state.newTalent.on_vacation_till !== "0000-00-00")
+            commit('setStatus', 'P')
+        console.log(state.newTalent)
         if (message != "")
         {
             commit('setError', message)
@@ -318,6 +325,9 @@ const actions = {
     setStatus({ commit }, value) {
         commit('setStatus', value)
     },
+    setVacation({ commit }, value) {
+        commit('setVacation', value)
+    },
     setSearchKey({ commit }, value) {
         commit('setSearchKey', value)
     },
@@ -342,19 +352,22 @@ const mutations = {
         state.ageGroup = items
     },
     selectTalent(state, value1) {
-        state.currentTalent.id      = value1['id_voice_talent']
-        state.currentTalent.name    = value1['talent_name']
-        state.currentTalent.age     = value1['talent_age']
-        state.currentTalent.gender  = value1['talent_gender']
-        state.currentTalent.status  = value1['status']
-        state.currentTalent.avatar  = value1['guid']
+        state.currentTalent.id                  = value1['id_voice_talent']
+        state.currentTalent.name                = value1['talent_name']
+        state.currentTalent.age                 = value1['talent_age']
+        state.currentTalent.gender              = value1['talent_gender']
+        state.currentTalent.status              = value1['status']
+        state.currentTalent.avatar              = value1['guid']
+        state.currentTalent.on_vacation_till    = value1['on_vacation_till']
 
-        state.newTalent.id          = value1['id_voice_talent']
-        state.newTalent.name        = value1['talent_name']
-        state.newTalent.age         = value1['talent_age']
-        state.newTalent.gender      = value1['talent_gender']
-        state.newTalent.status      = value1['status']
-        state.newTalent.avatar      = value1['guid']
+        state.newTalent.id                      = value1['id_voice_talent']
+        state.newTalent.name                    = value1['talent_name']
+        state.newTalent.age                     = value1['talent_age']
+        state.newTalent.gender                  = value1['talent_gender']
+        state.newTalent.status                  = value1['status']
+        state.newTalent.avatar                  = value1['guid']
+        state.newTalent.on_vacation_till        = value1['on_vacation_till']
+        console.log(state.newTalent)
     },
     setModalVisibility(state, value) {
         if (!value['modalValue'])
@@ -384,6 +397,9 @@ const mutations = {
     },
     setStatus(state, value) {
         state.newTalent.status = value
+    },
+    setVacation(state, value) {
+        state.newTalent.on_vacation_till = value
     },
     setSearchKey(state, value) {
         state.key = value

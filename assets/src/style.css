@@ -37,3 +37,14 @@
 .right-2 {
     right: 1rem;
 }
+
+
+#v-tailwind-picker > div {
+    position: absolute;
+    bottom: 50px;
+}
+#v-tailwind-picker:before {
+    bottom: 50px;
+    top: auto !important;
+    z-index: 0 !important;
+}

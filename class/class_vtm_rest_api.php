@@ -177,7 +177,7 @@ class ClassVTMRestAPI
         // if no order, default to asc
         $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
 
-        $sql = "select a.id_voice_talent, a.talent_name, a.status, a.talent_gender, a.talent_age, b.gender, c.age, j.guid 
+        $sql = "select a.id_voice_talent, a.talent_name, a.status, a.talent_gender, a.talent_age, a.on_vacation_till, b.gender, c.age, j.guid
                     from {$db_prefix}lfm_voice_talents a
                     left join {$db_prefix}lfm_genders b on a.talent_gender = b.id_gender
                     left join {$db_prefix}lfm_ages c on a.talent_age = c.id_age
@@ -249,11 +249,12 @@ class ClassVTMRestAPI
             }
             $wpdb->insert(
                 $tbl, //table
-                array('talent_name' => $talent_name,
-                    'talent_gender' => $request['gender'],
-                    'talent_age' => $request['age'],
-                    'image_location' => $uploaded,
-                    'status' => $request['status']),
+                array('talent_name'     => $talent_name,
+                    'talent_gender'     => $request['gender'],
+                    'talent_age'        => $request['age'],
+                    'image_location'    => $uploaded,
+                    'status'            => $request['status'],
+                    'on_vacation_till'  => $request['on_vacation_till']),
                 array('%s') //data format
             );
             $result['message'] = "Voice talent added";
@@ -289,7 +290,8 @@ class ClassVTMRestAPI
                     array('talent_name'         => $request['name'],
                         'talent_gender'         => $request['gender'],
                         'talent_age'            => $request['age'],
-                        'status'                => $request['status']), // data
+                        'status'                => $request['status'],
+                        'on_vacation_till'      => $request['on_vacation_till']), // data
                     array('id_voice_talent' => $talent_id) // where
                 );
             else
@@ -299,7 +301,8 @@ class ClassVTMRestAPI
                         'talent_gender'         => $request['gender'],
                         'talent_age'            => $request['age'],
                         'image_location'        => $uploaded,
-                        'status'                => $request['status']), // data
+                        'status'                => $request['status'],
+                        'on_vacation_till'      => $request['on_vacation_till']), // data
                     array('id_voice_talent' => $talent_id) // where
                 );
             $result['message'] = "Voice talent updated";

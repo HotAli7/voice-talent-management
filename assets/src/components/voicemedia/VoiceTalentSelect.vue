@@ -18,7 +18,7 @@
                         </span>
                     </div>
                     <div class="flex items-center space-x-3" v-else>
-                        <img src=""
+                        <img src="/wp-content/plugins/voice-talent-management/profile.png"
                              alt="" class="flex-shrink-0 h-6 w-6 rounded-full" />
                         <input type="text" class="block truncate border-0 focus:outline-none focus:ring focus:border-blue-300" @input="selectTalent" />
                     </div>

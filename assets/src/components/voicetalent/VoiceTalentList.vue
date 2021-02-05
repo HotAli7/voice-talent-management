@@ -44,9 +44,12 @@
                                         {{talent.age}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap">
-                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                      {{statusText[talent.status]}}
-                                                    </span>
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                          {{statusText[talent.status]}}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                                        {{talent.on_vacation_till}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         <a @click="selectTalentMedia({ value1: talent, value2: 'showMediaListModal' })" class="hover:text-blue-500 transition-all duration-300 cursor-pointer">View Media</a>

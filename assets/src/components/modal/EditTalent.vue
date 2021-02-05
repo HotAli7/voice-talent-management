@@ -19,31 +19,63 @@
                             <div class="mt-2">
                                 <div class="mt-4 flex flex-col justify-center items-center">
                                     <div class="relative w-24 h-24 rounded-full border border-gray-200 overflow-hidden">
-                                        <img id="output_avatar" width="200" :src="currentTalent.avatar" />
+                                        <img id="output_avatar" width="200" :src="newTalent.avatar" />
                                         <input type="file"  accept="image/*" name="avatar" id="avatar"  @change="loadAvatar($event)" class="hidden">
                                         <label for="avatar" class="absolute top-0 flex justify-center items-center w-full h-full cursor-pointer bg-gray-300 opacity-0 hover:opacity-75 transition-all duration-300 ease-in-out z-10" ><i class="fa fa-plus text-2xl"></i></label>
                                     </div>
                                 </div>
                                 <div class="mt-4">
-                                    <input aria-label="Name" name="name" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Name" :value="currentTalent.name" @change="updateName($event)">
+                                    <input aria-label="Name" name="name" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Name" :value="newTalent.name" @change="updateName($event)">
                                 </div>
                                 <div class="mt-4">
                                     <select aria-label="Gender" name="gender" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateGender($event)">
                                         <option value="">Gender</option>
-                                        <option :value="g.id" :selected="currentTalent.gender === g.id" v-for="g in gender">{{g.name}}</option>
+                                        <option :value="g.id" :selected="newTalent.gender === g.id" v-for="g in gender">{{g.name}}</option>
                                     </select>
                                 </div>
                                 <div class="mt-4">
                                     <select aria-label="Age" name="age" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateAge($event)">
                                         <option value="">Age</option>
-                                        <option :value="age.id_age" :selected="currentTalent.age === age.id_age" v-for="age in ageGroup">{{age.age}}</option>
+                                        <option :value="age.id_age" :selected="newTalent.age === age.id_age" v-for="age in ageGroup">{{age.age}}</option>
                                     </select>
                                 </div>
                                 <div class="mt-4">
                                     <select aria-label="Statue" name="statue" type="text" required class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" @change="updateStatus($event)">
                                         <option value="">Status</option>
-                                        <option :value="s.id" :selected="currentTalent.status === s.id" v-for="s in status">{{s.name}}</option>
+                                        <option :value="s.id" :selected="newTalent.status === s.id" v-for="s in status">{{s.name}}</option>
                                     </select>
+                                </div>
+                                <div class="mt-4">
+                                    <VueTailWindPicker
+                                        :theme="{
+                                                    background: '#1A202C',
+                                                    text: 'text-white',
+                                                    border: 'border-gray-700',
+                                                    currentColor: 'text-gray-200',
+                                                    navigation: {
+                                                        background: 'bg-gray-800',
+                                                        hover: 'hover:bg-gray-700',
+                                                        focus: 'bg-gray-700',
+                                                    },
+                                                    picker: {
+                                                        rounded: 'rounded-md',
+                                                        selected: {
+                                                            background: 'bg-teal-400',
+                                                            border: 'border-teal-400',
+                                                            hover: 'hover:border-teal-400',
+                                                        },
+                                                        holiday: 'text-red-400',
+                                                        weekend: 'text-green-400',
+                                                        event: 'bg-blue-500',
+                                                    },
+                                                    event: {
+                                                        border: 'border-gray-700',
+                                                    },
+                                                }"
+                                        :init="false"
+                                        @change="(v) => { updateVacation(v) }">
+                                        <input v-model="newTalent.on_vacation_till" class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" placeholder="Example initial value">
+                                    </VueTailWindPicker>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +103,9 @@
 
     export default {
         name: "EditTalent",
-
+        components: {
+            VueTailWindPicker: () => import('vue-tailwind-picker')
+        },
         data() {
             return {
 
@@ -83,10 +117,10 @@
         destroyed() {
         },
         computed: {
-            ...mapGetters('VoiceTalentList', ['showEditModal', 'ageGroup', 'currentTalent', 'gender', 'status']),
+            ...mapGetters('VoiceTalentList', ['showEditModal', 'ageGroup', 'newTalent', 'gender', 'status']),
         },
         methods: {
-            ...mapActions('VoiceTalentList', ['setModalVisibility', 'fetchAgeGroupData', 'updateTalent', 'saveTalent', 'setAvatar', 'setName', 'setGender', 'setAge', 'setStatus']),
+            ...mapActions('VoiceTalentList', ['setModalVisibility', 'fetchAgeGroupData', 'updateTalent', 'saveTalent', 'setAvatar', 'setName', 'setGender', 'setAge', 'setStatus', 'setVacation']),
             updateModalVisibility(modalName, modalValue) {
                 let v = {
                     modalName: modalName,
@@ -110,6 +144,9 @@
             },
             updateStatus(event) {
                 this.setStatus(event.target.value)
+            },
+            updateVacation(v) {
+                this.setVacation(v)
             }
         }
     }
